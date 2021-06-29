@@ -234,5 +234,6 @@ function animate() {
 
 	renderer.render(scene, camera);
 }
-
+//HIER BEN IK
+//http://creativejs.com/tutorials/three-js-part-1-make-a-star-field/index.html
 animate();
