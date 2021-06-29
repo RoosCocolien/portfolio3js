@@ -5,18 +5,31 @@ import * as THREE from 'three';
 import {OrbitControls} from './node_modules/three/examples/jsm/controls/OrbitControls';
 
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
 const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#background'),
 });
-
+scene.fog = new THREE.FogExp2(0x11111f, 0.002);
 renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setClearColor(scene.fog.color);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(-10);
 
-const hulahoopTexture = new THREE.TextureLoader().load('textures/stripe_pattern.jpeg', function (hulahoopTexture) {
+const beachTexture = new THREE.TextureLoader().load('textures/beach.jpg', function (beachTexture) {
+	beachTexture.wrapS = beachTexture.wrapT = THREE.RepeatWrapping;
+	beachTexture.repeat.set(18, 18);
+});
+const beachSurface = new THREE.Mesh(
+	new THREE.CircleGeometry(170, 32),
+	new THREE.MeshBasicMaterial({ map: beachTexture })
+)
+// beachSurface.rotation.z = 30;
+beachSurface.rotation.x = 30;
+beachSurface.position.y = -6;
+scene.add(beachSurface);
+
+
+const hulahoopTexture = new THREE.TextureLoader().load('textures/yellow_red_stripes.jpeg', function (hulahoopTexture) {
 	hulahoopTexture.wrapS = hulahoopTexture.wrapT = THREE.RepeatWrapping;
 	hulahoopTexture.repeat.set(8, 0.3);
 });
@@ -49,19 +62,37 @@ hulahoop.position.z = -10;
 //we then need to call controls.update() in the game loop (animation loop)
 const controls = new OrbitControls(camera, renderer.domElement);
 
-function addStar() {
-	const geometryStar = new THREE.SphereGeometry(0.25, 24, 24);
-	const materialStar = new THREE.MeshStandardMaterial({color: 0xffffff});
-	const star = new THREE.Mesh(geometryStar, materialStar);
+// //STARS
+// function addStar() {
+// 	const geometryStar = new THREE.SphereGeometry(0.25, 24, 24);
+// 	const materialStar = new THREE.MeshStandardMaterial({color: 0xffffff});
+// 	const star = new THREE.Mesh(geometryStar, materialStar);
 
-	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(400));
-	star.position.set(x, y, z);
-	scene.add(star);
+// 	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(400));
+// 	star.position.set(x, y, z);
+// 	scene.add(star);
+// }
+// Array(400).fill().forEach(addStar);
+
+//Add Bubbles
+function addBubble() {
+	const geometryBubble = new THREE.SphereGeometry(1, 50, 50);
+	const materialBubble = new THREE.MeshPhongMaterial({
+		color: 0x42f5cb,
+		opacity: 0.5,
+		transparent: true
+	});
+	const bubble = new THREE.Mesh(geometryBubble, materialBubble);
+
+	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(800));
+	bubble.position.set(x, y, z);
+	scene.add(bubble);
 }
+Array(400).fill().forEach(addBubble);
 
-Array(400).fill().forEach(addStar);
 
-const spaceTexture = new THREE.TextureLoader().load('textures/2k_stars_milky_way.jpeg');
+
+const spaceTexture = new THREE.TextureLoader().load('textures/underwater_wallpaper.jpeg');
 scene.background = spaceTexture;
 
 //roosCube
@@ -82,16 +113,15 @@ scene.add(roosCube);
 // scene.add(roosCube);
 
 //worldSphere
-const worldDayTexture = new THREE.TextureLoader().load('textures/2k_earth_daymap.jpeg');
+const worldDayTexture = new THREE.TextureLoader().load('textures/fish_texture.jpeg');
 const worldNightTexture = new THREE.TextureLoader().load('textures/2k_earth_nightmap.jpeg');
-const sunTexture = new THREE.TextureLoader().load('textures/2k_sun.jpeg');
-const moonTexture = new THREE.TextureLoader().load('textures/2k_moon.jpeg');
+const sunTexture = new THREE.TextureLoader().load('textures/fish_texture_pink.jpeg');
+const moonTexture = new THREE.TextureLoader().load('textures/submarine.jpeg');
 const normalTexture = new THREE.TextureLoader().load('textures/2k_earth_normal_map.tif');
 const worldSphere = new THREE.Mesh(
 	new THREE.SphereGeometry(3, 32, 32),
 	new THREE.MeshStandardMaterial({
 		map: worldDayTexture,
-		normalMap: normalTexture
 	})
 )
 const moonSphere = new THREE.Mesh(
@@ -115,17 +145,6 @@ sunSphere.position.z = 100;
 sunSphere.position.x = 0;
 sunSphere.position.y = 15;
 scene.add(worldSphere, sunSphere, moonSphere);
-// //worldSphere without texture
-// const geometryWorld = new THREE.SphereGeometry(3, 32, 32);
-// const materialWorld = new THREE.MeshStandardMaterial({color: 0x8a6025});
-// const worldSphere = new THREE.Mesh(geometryWorld, materialWorld);
-// worldSphere.position.z = 30;
-// worldSphere.position.x = -10;
-// const worldSphere2 = new THREE.Mesh(geometryWorld, materialWorld);
-// worldSphere2.position.z = 40;
-// worldSphere2.position.x = 10;
-// worldSphere2.position.y = 10;
-// scene.add(worldSphere, worldSphere2);
 
 
 function moveCamera() {
@@ -173,11 +192,12 @@ function animate() {
 	hulahoop.rotation.y += 0.005;
 	hulahoop.rotation.z += 0.007;
 
-	controls.update();
+	for (let i = 0; i < 400; i++) {
+		Array[0] = Array[0] += 1;
+	}
 
-	// console.log('sphere', worldSphere.position.x, ' ', worldSphere.position.y, ' ', worldSphere.position.z);
-	// console.log('canera', camera.position.x, ' ', camera.position.y, ' ', camera.position.z);
-	// console.log('cube', roosCube.position.x, ' ', roosCube.position.y, ' ', roosCube.position.z);
+
+	controls.update();
 
 	renderer.render(scene, camera);
 }
