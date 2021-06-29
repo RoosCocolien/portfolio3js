@@ -75,40 +75,57 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // 	scene.add(star);
 // }
 // Array(400).fill().forEach(addStar);
-//Add Bubbles
-function addBubble() {
-	const geometryBubble = new THREE.SphereGeometry(3, 50, 50);
-	const materialBubble = new THREE.MeshPhongMaterial({
-		color: 0x42f5cb,
-		opacity: 0.5,
-		transparent: true
-	});
-	const bubble = new THREE.Mesh(geometryBubble, materialBubble);
+// //Add Bubbles
+// function addBubble() {
+// 	const geometryBubble = new THREE.SphereGeometry(3, 50, 50);
+// 	const materialBubble = new THREE.MeshPhongMaterial({
+// 		color: 0x42f5cb,
+// 		opacity: 0.5,
+// 		transparent: true
+// 	});
+// 	const bubble = new THREE.Mesh(geometryBubble, materialBubble);
 
-	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(800));
-	bubble.position.set(x, y, z);
-	scene.add(bubble);
-}
-Array(400).fill().forEach(addBubble);
-
-// var bubbles = [];
-// function createBubbles() {
-// 	var bubble, material;
-// 	for (var zpos = -1000 ; zpos < 1000; zpos+=20) {
-// 		material = new THREE.ParticleCanvasMaterial({
-// 			color: 0x42f5cb,
-// 			program: particleRender,
-// 			opacity: 0.5,
-// 			transparant: true
-// 		})
-// 		partical = new THREE.Particle(material);
-// 		particle.position.x = Math.random() * 1000 - 500;
-// 		particle.position.y = Math.random() * 1000 - 500;
-// 	}
+// 	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(800));
+// 	bubble.position.set(x, y, z);
+// 	scene.add(bubble);
 // }
+// Array(400).fill().forEach(addBubble);
 
+const bubbleTexture = new THREE.TextureLoader().load('textures/bubble_texture');
 
-// createBubbles();
+var bubbles = [];
+function createBubbles() {
+	var bubble, geoBubble, material;
+	for (var zpos = -1000 ; zpos < 1000; zpos+=20) {
+		geoBubble = new THREE.SphereGeometry(3, 50, 50);
+		material = new THREE.PointsMaterial({
+			color: 0x42f5cb,
+			opacity: 0.9,
+			map: bubbleTexture
+		})
+		bubble = new THREE.Mesh(geoBubble, material);
+		bubble.position.x = Math.random() * 1000 - 500;
+		bubble.position.y = Math.random() * 1000 - 500;
+		bubble.position.z = zpos;
+		bubble.scale.x = bubble.scale.y = 10;
+		scene.add(bubble)
+		bubbles.push(bubble);
+	}
+}
+
+function updateBubbles() {
+	//iterate through every bubble
+	var bubble;
+	for (var i = 0; i < bubbles.length; i++) {
+		bubble = bubbles[i];
+		//move it upwards
+		bubble.position.y *= 0.02;
+		if (bubble.position.y > 500)
+			bubble.position.y = 0;
+	}
+}
+
+createBubbles();
 
 
 
@@ -218,7 +235,7 @@ function animate() {
 	sunSphere.position.x = 5*Math.cos(t) + 0;
 	sunSphere.position.y = 5*Math.sin(t) + 0;
 
-	// updateBubbles();
+	updateBubbles();
 	// hulahoop.rotation.x += 0.006;
 	// hulahoop.rotation.y += 0.005;
 	// hulahoop.rotation.z += 0.007;
