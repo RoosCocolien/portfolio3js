@@ -14,7 +14,7 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(30);
+camera.position.setZ(-10);
 
 const hulahoopTexture = new THREE.TextureLoader().load('textures/stripe_pattern.jpeg', function (hulahoopTexture) {
 	hulahoopTexture.wrapS = hulahoopTexture.wrapT = THREE.RepeatWrapping;
@@ -24,29 +24,37 @@ const hulahoop = new THREE.Mesh(
 	new THREE.TorusGeometry(10, 0.3, 16, 100),
 	new THREE.MeshBasicMaterial({ map: hulahoopTexture})
 )
-// const geometry = new THREE.TorusGeometry(10, 0.3, 16, 100);
-// const material = new THREE.MeshStandardMaterial({color: 0xFF6347});
-// const hulahoop = new THREE.Mesh(geometry, material);
 hulahoop.position.x = 30;
 scene.add(hulahoop);
+// //hulahoop without pattern
+// const geometryHoop = new THREE.TorusGeometry(10, 0.3, 16, 100);
+// const materialHoop = new THREE.MeshStandardMaterial({color: 0x38aba1});
+// const hulahoop = new THREE.Mesh(geometryHoop, materialHoop);
+// hulahoop.position.x = 7;
+// hulahoop.position.z = -10;
+// scene.add(hulahoop);
 
 const pointLight = new THREE.PointLight(0xFFFFFF);
 pointLight.position.set(20, 20, 20);
 const ambientLight = new THREE.AmbientLight(0xFFFFFF);
 scene.add(pointLight, ambientLight);
+hulahoop.position.x = 7;
+hulahoop.position.z = -10;
 // const pointlightHelper = new THREE.PointLightHelper(pointLight);
 // scene.add(pointlightHelper, gridHelper);
+// const gridHelper = new THREE.GridHelper(200,50);
+// scene.add(gridHelper);
 
 //This will listen to Dom events on the mouse and update the camera position accordingly
 //we then need to call controls.update() in the game loop (animation loop)
 const controls = new OrbitControls(camera, renderer.domElement);
 
 function addStar() {
-	const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-	const material = new THREE.MeshStandardMaterial({color: 0xffffff});
-	const star = new THREE.Mesh(geometry, material);
+	const geometryStar = new THREE.SphereGeometry(0.25, 24, 24);
+	const materialStar = new THREE.MeshStandardMaterial({color: 0xffffff});
+	const star = new THREE.Mesh(geometryStar, materialStar);
 
-	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(200));
+	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(400));
 	star.position.set(x, y, z);
 	scene.add(star);
 }
@@ -62,12 +70,22 @@ const roosCube = new THREE.Mesh(
 	new THREE.BoxGeometry(5, 5, 5),
 	new THREE.MeshBasicMaterial({ map: roosTexture })
 )
-roosCube.position.x = 30;
+roosCube.position.x = 7;
+roosCube.position.z = -10;
 scene.add(roosCube);
+// //roosCube without PICTURE
+// const geometryRoos = new THREE.BoxGeometry(5, 5, 5);
+// const materialRoos = new THREE.MeshStandardMaterial({color: 0x45962c});
+// const roosCube = new THREE.Mesh(geometryRoos, materialRoos);
+// roosCube.position.x = 7;
+// roosCube.position.z = -10;
+// scene.add(roosCube);
 
 //worldSphere
 const worldDayTexture = new THREE.TextureLoader().load('textures/2k_earth_daymap.jpeg');
-// const worldNightTexture = new THREE.TextureLoader().load('2k_earth_nightmap.jpeg');
+const worldNightTexture = new THREE.TextureLoader().load('textures/2k_earth_nightmap.jpeg');
+const sunTexture = new THREE.TextureLoader().load('textures/2k_sun.jpeg');
+const moonTexture = new THREE.TextureLoader().load('textures/2k_moon.jpeg');
 const normalTexture = new THREE.TextureLoader().load('textures/2k_earth_normal_map.tif');
 const worldSphere = new THREE.Mesh(
 	new THREE.SphereGeometry(3, 32, 32),
@@ -76,9 +94,38 @@ const worldSphere = new THREE.Mesh(
 		normalMap: normalTexture
 	})
 )
+const moonSphere = new THREE.Mesh(
+	new THREE.SphereGeometry(4, 32, 32),
+	new THREE.MeshStandardMaterial({
+		map: moonTexture
+	})
+)
+const sunSphere = new THREE.Mesh(
+	new THREE.SphereGeometry(6, 32, 32),
+	new THREE.MeshStandardMaterial({
+		map: sunTexture
+	})
+)
 worldSphere.position.z = 30;
 worldSphere.position.x = -10;
-scene.add(worldSphere);
+moonSphere.position.z = 40;
+moonSphere.position.x = 10;
+moonSphere.position.y = 10;
+sunSphere.position.z = 100;
+sunSphere.position.x = 0;
+sunSphere.position.y = 15;
+scene.add(worldSphere, sunSphere, moonSphere);
+// //worldSphere without texture
+// const geometryWorld = new THREE.SphereGeometry(3, 32, 32);
+// const materialWorld = new THREE.MeshStandardMaterial({color: 0x8a6025});
+// const worldSphere = new THREE.Mesh(geometryWorld, materialWorld);
+// worldSphere.position.z = 30;
+// worldSphere.position.x = -10;
+// const worldSphere2 = new THREE.Mesh(geometryWorld, materialWorld);
+// worldSphere2.position.z = 40;
+// worldSphere2.position.x = 10;
+// worldSphere2.position.y = 10;
+// scene.add(worldSphere, worldSphere2);
 
 
 function moveCamera() {
@@ -90,7 +137,7 @@ function moveCamera() {
 	const topValue = document.body.getBoundingClientRect().top;
 	// console.log('t: ', topValue);
 	worldSphere.rotation.x += 0.05;
-	worldSphere.rotation.y += 0.075;
+	worldSphere.rotation.y += 0.01;
 	worldSphere.rotation.z += 0.05;
 	worldSphere.position.y *= -(topValue)
 
@@ -110,6 +157,14 @@ function moveCamera() {
 }
 moveCamera();
 document.body.onscroll = moveCamera;
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+window.addEventListener('resize', onWindowResize, false);
 
 function animate() {
 	requestAnimationFrame(animate);
