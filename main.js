@@ -169,7 +169,7 @@ window.addEventListener('resize', onWindowResize, false);
 function animate() {
 	requestAnimationFrame(animate);
 
-	hulahoop.rotation.x += 0.006;
+	hulahoop.rotation.x += 0.010;
 	hulahoop.rotation.y += 0.005;
 	hulahoop.rotation.z += 0.007;
 
