@@ -13,7 +13,8 @@ scene.fog = new THREE.FogExp2(0x11111f, 0.002);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setClearColor(scene.fog.color);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(-10);
+document.body.appendChild(renderer.domElement);
+
 
 const beachTexture = new THREE.TextureLoader().load('textures/beach.jpg', function (beachTexture) {
 	beachTexture.wrapS = beachTexture.wrapT = THREE.RepeatWrapping;
@@ -25,7 +26,7 @@ const beachSurface = new THREE.Mesh(
 )
 // beachSurface.rotation.z = 30;
 beachSurface.rotation.x = 30;
-beachSurface.position.y = -6;
+beachSurface.position.y = -20;
 scene.add(beachSurface);
 
 
@@ -34,10 +35,12 @@ const hulahoopTexture = new THREE.TextureLoader().load('textures/yellow_red_stri
 	hulahoopTexture.repeat.set(8, 0.3);
 });
 const hulahoop = new THREE.Mesh(
-	new THREE.TorusGeometry(10, 0.3, 16, 100),
+	new THREE.TorusGeometry(8, 0.3, 16, 100),
 	new THREE.MeshBasicMaterial({ map: hulahoopTexture})
 )
-hulahoop.position.x = 30;
+hulahoop.position.x = 7;
+hulahoop.position.z = -10;
+// hulahoop.rotation.x = 30;
 scene.add(hulahoop);
 // //hulahoop without pattern
 // const geometryHoop = new THREE.TorusGeometry(10, 0.3, 16, 100);
@@ -51,8 +54,7 @@ const pointLight = new THREE.PointLight(0xFFFFFF);
 pointLight.position.set(20, 20, 20);
 const ambientLight = new THREE.AmbientLight(0xFFFFFF);
 scene.add(pointLight, ambientLight);
-hulahoop.position.x = 7;
-hulahoop.position.z = -10;
+
 // const pointlightHelper = new THREE.PointLightHelper(pointLight);
 // scene.add(pointlightHelper, gridHelper);
 // const gridHelper = new THREE.GridHelper(200,50);
@@ -73,10 +75,9 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // 	scene.add(star);
 // }
 // Array(400).fill().forEach(addStar);
-
 //Add Bubbles
 function addBubble() {
-	const geometryBubble = new THREE.SphereGeometry(1, 50, 50);
+	const geometryBubble = new THREE.SphereGeometry(3, 50, 50);
 	const materialBubble = new THREE.MeshPhongMaterial({
 		color: 0x42f5cb,
 		opacity: 0.5,
@@ -89,6 +90,25 @@ function addBubble() {
 	scene.add(bubble);
 }
 Array(400).fill().forEach(addBubble);
+
+// var bubbles = [];
+// function createBubbles() {
+// 	var bubble, material;
+// 	for (var zpos = -1000 ; zpos < 1000; zpos+=20) {
+// 		material = new THREE.ParticleCanvasMaterial({
+// 			color: 0x42f5cb,
+// 			program: particleRender,
+// 			opacity: 0.5,
+// 			transparant: true
+// 		})
+// 		partical = new THREE.Particle(material);
+// 		particle.position.x = Math.random() * 1000 - 500;
+// 		particle.position.y = Math.random() * 1000 - 500;
+// 	}
+// }
+
+
+// createBubbles();
 
 
 
@@ -185,16 +205,29 @@ function onWindowResize() {
 
 window.addEventListener('resize', onWindowResize, false);
 
+let t = 0;
 function animate() {
 	requestAnimationFrame(animate);
 
-	hulahoop.rotation.x += 0.006;
-	hulahoop.rotation.y += 0.005;
-	hulahoop.rotation.z += 0.007;
+	t += 0.01;
 
-	for (let i = 0; i < 400; i++) {
-		Array[0] = Array[0] += 1;
-	}
+	moonSphere.position.x = 20*Math.cos(t) + 0;
+	moonSphere.position.z = 20*Math.sin(t) + 0;
+	worldSphere.position.x = 50*Math.cos(t) + 0;
+	worldSphere.position.z = 50*Math.sin(t) + 0;
+	sunSphere.position.x = 5*Math.cos(t) + 0;
+	sunSphere.position.y = 5*Math.sin(t) + 0;
+
+	// updateBubbles();
+	// hulahoop.rotation.x += 0.006;
+	// hulahoop.rotation.y += 0.005;
+	// hulahoop.rotation.z += 0.007;
+	// hulahoop.position.x = 3*Math.cos(t) + 0;
+	// hulahoop.position.z = 3*Math.sin(t) + 0;
+
+	// for (let i = 0; i < 400; i++) {
+	// 	Array[0] = Array[0] += 1;
+	// }
 
 
 	controls.update();
