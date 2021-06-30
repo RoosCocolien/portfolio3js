@@ -1,8 +1,12 @@
 import './style.css';
-
 import * as THREE from 'three';
+import CameraControls from 'camera-controls';
+import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
+import { STLLoader } from './node_modules/three/examples/jsm/loaders/STLLoader';
+import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader';
+import { CubeCamera } from 'three';
 
-import {OrbitControls} from './node_modules/three/examples/jsm/controls/OrbitControls';
+CameraControls.install({THREE: THREE});
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -25,8 +29,8 @@ const beachSurface = new THREE.Mesh(
 	new THREE.MeshBasicMaterial({ map: beachTexture })
 )
 // beachSurface.rotation.z = 30;
-beachSurface.rotation.x = 30;
-beachSurface.position.y = -20;
+beachSurface.rotation.x = 260 * (Math.PI / 180);
+beachSurface.position.y = -40;
 scene.add(beachSurface);
 
 
@@ -42,13 +46,7 @@ hulahoop.position.x = 7;
 hulahoop.position.z = -10;
 // hulahoop.rotation.x = 30;
 scene.add(hulahoop);
-// //hulahoop without pattern
-// const geometryHoop = new THREE.TorusGeometry(10, 0.3, 16, 100);
-// const materialHoop = new THREE.MeshStandardMaterial({color: 0x38aba1});
-// const hulahoop = new THREE.Mesh(geometryHoop, materialHoop);
-// hulahoop.position.x = 7;
-// hulahoop.position.z = -10;
-// scene.add(hulahoop);
+
 
 const pointLight = new THREE.PointLight(0xFFFFFF);
 pointLight.position.set(20, 20, 20);
@@ -62,52 +60,25 @@ scene.add(pointLight, ambientLight);
 
 //This will listen to Dom events on the mouse and update the camera position accordingly
 //we then need to call controls.update() in the game loop (animation loop)
+
+//dit moet weer aangezet worden
 const controls = new OrbitControls(camera, renderer.domElement);
 
-// //STARS
-// function addStar() {
-// 	const geometryStar = new THREE.SphereGeometry(0.25, 24, 24);
-// 	const materialStar = new THREE.MeshStandardMaterial({color: 0xffffff});
-// 	const star = new THREE.Mesh(geometryStar, materialStar);
 
-// 	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(400));
-// 	star.position.set(x, y, z);
-// 	scene.add(star);
-// }
-// Array(400).fill().forEach(addStar);
-// //Add Bubbles
-// function addBubble() {
-// 	const geometryBubble = new THREE.SphereGeometry(3, 50, 50);
-// 	const materialBubble = new THREE.MeshPhongMaterial({
-// 		color: 0x42f5cb,
-// 		opacity: 0.5,
-// 		transparent: true
-// 	});
-// 	const bubble = new THREE.Mesh(geometryBubble, materialBubble);
-
-// 	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(800));
-// 	bubble.position.set(x, y, z);
-// 	scene.add(bubble);
-// }
-// Array(400).fill().forEach(addBubble);
-
-const bubbleTexture = new THREE.TextureLoader().load('textures/bubble_texture');
 
 var bubbles = [];
 function createBubbles() {
 	var bubble, geoBubble, material;
-	for (var zpos = -1000 ; zpos < 1000; zpos+=20) {
-		geoBubble = new THREE.SphereGeometry(3, 50, 50);
-		material = new THREE.PointsMaterial({
+	for (var zpos = -3000 ; zpos < 1000; zpos+=2) {
+		geoBubble = new THREE.SphereGeometry(1, 50, 50);
+		material = new THREE.MeshPhongMaterial({
 			color: 0x42f5cb,
 			opacity: 0.9,
-			map: bubbleTexture
 		})
 		bubble = new THREE.Mesh(geoBubble, material);
 		bubble.position.x = Math.random() * 1000 - 500;
-		bubble.position.y = Math.random() * 1000 - 500;
+		bubble.position.y = Math.random() * 1000 - 300;
 		bubble.position.z = zpos;
-		bubble.scale.x = bubble.scale.y = 10;
 		scene.add(bubble)
 		bubbles.push(bubble);
 	}
@@ -116,15 +87,22 @@ function createBubbles() {
 function updateBubbles() {
 	//iterate through every bubble
 	var bubble;
+	var increment;
 	for (var i = 0; i < bubbles.length; i++) {
 		bubble = bubbles[i];
 		//move it upwards
-		bubble.position.y *= 0.02;
+		if (i % 3 === 0) {
+			increment = 0.3;
+		} else if (i % 3 === 1) {
+			increment = 0.6;
+		} else {
+			increment = 2;
+		}
+		bubble.position.y += increment;
 		if (bubble.position.y > 500)
-			bubble.position.y = 0;
+			bubble.position.y = -200;
 	}
 }
-
 createBubbles();
 
 
@@ -141,13 +119,6 @@ const roosCube = new THREE.Mesh(
 roosCube.position.x = 7;
 roosCube.position.z = -10;
 scene.add(roosCube);
-// //roosCube without PICTURE
-// const geometryRoos = new THREE.BoxGeometry(5, 5, 5);
-// const materialRoos = new THREE.MeshStandardMaterial({color: 0x45962c});
-// const roosCube = new THREE.Mesh(geometryRoos, materialRoos);
-// roosCube.position.x = 7;
-// roosCube.position.z = -10;
-// scene.add(roosCube);
 
 //worldSphere
 const worldDayTexture = new THREE.TextureLoader().load('textures/fish_texture.jpeg');
@@ -183,6 +154,63 @@ sunSphere.position.x = 0;
 sunSphere.position.y = 15;
 scene.add(worldSphere, sunSphere, moonSphere);
 
+//FISHES
+const textureParasect = new THREE.TextureLoader().load('models/textures/Parasect_pm0047_00_BodyA1.png');
+const materialParasect = new THREE.MeshPhongMaterial({
+	map: textureParasect
+})
+const loaderParasect = new OBJLoader();
+loaderParasect.load(
+	'models/Parasect.obj',
+	function (objectParasect) {
+		objectParasect.traverse(function ( node ) {
+			if (node.isMesh) {
+				node.material = materialParasect;
+			}
+		})
+		scene.add(objectParasect);
+		objectParasect.rotation.x = 30 * (Math.PI / 180);
+		objectParasect.position.x = 20
+		objectParasect.position.z = 30
+		objectParasect.position.y = 0;
+	},
+	function (xhr) {
+		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+	function (error) {
+		console.log('An error occurred');
+	}
+)
+
+const textureShark = new THREE.TextureLoader().load('models/textures/cartoon_shark.jpg');
+const materialShark = new THREE.MeshPhongMaterial({
+	map: textureShark
+})
+const loaderShark = new OBJLoader();
+loaderShark.load(
+	'models/cartoon_shark.obj',
+	function (objectShark) {
+		objectShark.traverse(function ( node ) {
+			if (node.isMesh) {
+				node.material = materialShark;
+			}
+		})
+		scene.add(objectShark);
+		objectShark.rotation.x = 30 * (Math.PI / 180);
+		objectShark.position.x = 15
+		objectShark.position.z = 25
+		objectShark.position.y = 2;
+	},
+	function (xhr) {
+		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+	function (error) {
+		console.log('An error occurred');
+	}
+)
+
+
+
 
 function moveCamera() {
 	//where is the user currently scrolled to? Get the view port.
@@ -191,7 +219,6 @@ function moveCamera() {
 	//the top porperty will show us how far we are from the top of the webpage
 	//from there we can start changing properties on our 3d objects whenever this function is called
 	const topValue = document.body.getBoundingClientRect().top;
-	// console.log('t: ', topValue);
 	worldSphere.rotation.x += 0.05;
 	worldSphere.rotation.y += 0.01;
 	worldSphere.rotation.z += 0.05;
@@ -221,6 +248,18 @@ function onWindowResize() {
 }
 
 window.addEventListener('resize', onWindowResize, false);
+// document.addEventListener('keydown', onDocumentKeyDown, false);
+// function onDocumentKeyDown(event) {
+// 	if (keycode == 87) { //up
+// 		camera.position.y += 1;
+// 	} else if (keycode == 83) { //down
+// 		camera.position.y -= 1;
+// 	} else if (keycode == 65) { //left
+// 		camera.position.x -= 1;
+// 	} else if (keycode == 68) { //right
+// 		camera.position.x += 1;
+// 	}
+// }
 
 let t = 0;
 function animate() {
@@ -234,23 +273,21 @@ function animate() {
 	worldSphere.position.z = 50*Math.sin(t) + 0;
 	sunSphere.position.x = 5*Math.cos(t) + 0;
 	sunSphere.position.y = 5*Math.sin(t) + 0;
+	// objectShark.position.x = 70*Math.cos(t) + 0;
+	// objectShark.position.y = 70*Math.sin(t) + 0;
 
-	updateBubbles();
+
 	// hulahoop.rotation.x += 0.006;
 	// hulahoop.rotation.y += 0.005;
 	// hulahoop.rotation.z += 0.007;
 	// hulahoop.position.x = 3*Math.cos(t) + 0;
 	// hulahoop.position.z = 3*Math.sin(t) + 0;
-
-	// for (let i = 0; i < 400; i++) {
-	// 	Array[0] = Array[0] += 1;
-	// }
-
-
-	controls.update();
+	
+	
+	updateBubbles();
+	controls.update(); //dit moet weer aangezet worden
 
 	renderer.render(scene, camera);
 }
-//HIER BEN IK
-//http://creativejs.com/tutorials/three-js-part-1-make-a-star-field/index.html
+
 animate();
