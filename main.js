@@ -9,7 +9,7 @@ import { CubeCamera } from 'three';
 CameraControls.install({THREE: THREE});
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
 const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#background'),
 });
@@ -69,15 +69,15 @@ const controls = new OrbitControls(camera, renderer.domElement);
 var bubbles = [];
 function createBubbles() {
 	var bubble, geoBubble, material;
-	for (var zpos = -3000 ; zpos < 1000; zpos+=2) {
+	for (var zpos = -100 ; zpos < 75; zpos+=3) {
 		geoBubble = new THREE.SphereGeometry(1, 50, 50);
 		material = new THREE.MeshPhongMaterial({
 			color: 0x42f5cb,
 			opacity: 0.9,
 		})
 		bubble = new THREE.Mesh(geoBubble, material);
-		bubble.position.x = Math.random() * 1000 - 500;
-		bubble.position.y = Math.random() * 1000 - 300;
+		bubble.position.x = Math.random() * 150 - (Math.random() * 150);
+		bubble.position.y = Math.random() * 200 - 30;
 		bubble.position.z = zpos;
 		scene.add(bubble)
 		bubbles.push(bubble);
@@ -99,7 +99,7 @@ function updateBubbles() {
 			increment = 2;
 		}
 		bubble.position.y += increment;
-		if (bubble.position.y > 500)
+		if (bubble.position.y > 75)
 			bubble.position.y = -200;
 	}
 }
@@ -150,11 +150,11 @@ moonSphere.position.z = 40;
 moonSphere.position.x = 10;
 moonSphere.position.y = 10;
 sunSphere.position.z = 100;
-sunSphere.position.x = 0;
+sunSphere.position.x = -50;
 sunSphere.position.y = 15;
 scene.add(worldSphere, sunSphere, moonSphere);
 
-//FISHES
+// //FISHES
 const textureParasect = new THREE.TextureLoader().load('models/textures/Parasect_pm0047_00_BodyA1.png');
 const materialParasect = new THREE.MeshPhongMaterial({
 	map: textureParasect
@@ -182,6 +182,7 @@ loaderParasect.load(
 	}
 )
 
+var shark;
 const textureShark = new THREE.TextureLoader().load('models/textures/cartoon_shark.jpg');
 const materialShark = new THREE.MeshPhongMaterial({
 	map: textureShark
@@ -195,11 +196,12 @@ loaderShark.load(
 				node.material = materialShark;
 			}
 		})
+		shark = objectShark;
 		scene.add(objectShark);
 		objectShark.rotation.x = 30 * (Math.PI / 180);
-		objectShark.position.x = 15
+		objectShark.position.x = 50
 		objectShark.position.z = 25
-		objectShark.position.y = 2;
+		objectShark.position.y = 3.5;
 	},
 	function (xhr) {
 		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
@@ -209,7 +211,11 @@ loaderShark.load(
 	}
 )
 
-
+function updateShark() {
+	shark.position.x = 100*Math.cos(t) + 50;
+	shark.position.z = 100*Math.sin(t) + -50;
+	shark.rotation.y = shark.rotation.y - (0.5 * (Math.PI / 180));
+}
 
 
 function moveCamera() {
@@ -248,18 +254,7 @@ function onWindowResize() {
 }
 
 window.addEventListener('resize', onWindowResize, false);
-// document.addEventListener('keydown', onDocumentKeyDown, false);
-// function onDocumentKeyDown(event) {
-// 	if (keycode == 87) { //up
-// 		camera.position.y += 1;
-// 	} else if (keycode == 83) { //down
-// 		camera.position.y -= 1;
-// 	} else if (keycode == 65) { //left
-// 		camera.position.x -= 1;
-// 	} else if (keycode == 68) { //right
-// 		camera.position.x += 1;
-// 	}
-// }
+
 
 let t = 0;
 function animate() {
@@ -267,11 +262,11 @@ function animate() {
 
 	t += 0.01;
 
-	moonSphere.position.x = 20*Math.cos(t) + 0;
-	moonSphere.position.z = 20*Math.sin(t) + 0;
-	worldSphere.position.x = 50*Math.cos(t) + 0;
-	worldSphere.position.z = 50*Math.sin(t) + 0;
-	sunSphere.position.x = 5*Math.cos(t) + 0;
+	moonSphere.position.x = 20*Math.cos(t) + 20;
+	moonSphere.position.z = 20*Math.sin(t) + 10;
+	worldSphere.position.x = 50*Math.cos(t) + 5;
+	worldSphere.position.z = 50*Math.sin(t) + 10;
+	sunSphere.position.x = 5*Math.cos(t) + -15;
 	sunSphere.position.y = 5*Math.sin(t) + 0;
 	// objectShark.position.x = 70*Math.cos(t) + 0;
 	// objectShark.position.y = 70*Math.sin(t) + 0;
@@ -285,6 +280,7 @@ function animate() {
 	
 	
 	updateBubbles();
+	updateShark();
 	controls.update(); //dit moet weer aangezet worden
 
 	renderer.render(scene, camera);
