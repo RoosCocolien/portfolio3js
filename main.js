@@ -212,9 +212,11 @@ loaderShark.load(
 )
 
 function updateShark() {
-	shark.position.x = 100*Math.cos(t) + 50;
-	shark.position.z = 100*Math.sin(t) + -50;
-	shark.rotation.y = shark.rotation.y - (0.5 * (Math.PI / 180));
+	if (shark) {
+		shark.position.x = 100*Math.cos(t) + 50;
+		shark.position.z = 100*Math.sin(t) + -50;
+		shark.rotation.y = shark.rotation.y - (0.5 * (Math.PI / 180));
+	}
 }
 
 
