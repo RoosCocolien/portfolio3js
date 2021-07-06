@@ -1,0 +1,335 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 28051,
+      "max": [
+        0.059514500200748444,
+        0.14849899709224701,
+        0.23138700425624847
+      ],
+      "min": [
+        -0.069146998226642609,
+        -0.1571899950504303,
+        0.00027709399000741541
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 336612,
+      "componentType": 5126,
+      "count": 28051,
+      "max": [
+        0.99999439716339111,
+        0.99997228384017944,
+        0.99999874830245972
+      ],
+      "min": [
+        -0.99999171495437622,
+        -0.99999141693115234,
+        -0.99999916553497314
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 28051,
+      "max": [
+        0.99999982118606567,
+        0.99999874830245972,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 28051,
+      "max": [
+        0.99901700019836426,
+        0.99041301012039185
+      ],
+      "min": [
+        0.00097699998877942562,
+        0.00098699994850903749
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 224408,
+      "componentType": 5126,
+      "count": 28051,
+      "max": [
+        0.99901700019836426,
+        0.99041301012039185
+      ],
+      "min": [
+        0.00097699998877942562,
+        0.00098699994850903749
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 448816,
+      "componentType": 5126,
+      "count": 28051,
+      "max": [
+        0.99901700019836426,
+        0.99041301012039185
+      ],
+      "min": [
+        0.00097699998877942562,
+        0.00098699994850903749
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 140592,
+      "max": [
+        28050
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Scottish Maritime Museum (https://sketchfab.com/ScottishMaritimeMuseum)",
+      "license": "CC0-1.0 (http://creativecommons.org/publicdomain/zero/1.0/)",
+      "source": "https://sketchfab.com/3d-models/subling-by-tom-mckendrick-9f53ad31be294554a4c4915ed823a41c",
+      "title": "‘Subling’ by Tom McKendrick"
+    },
+    "generator": "Sketchfab-7.80.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 562368,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 673224,
+      "byteOffset": 562368,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 673224,
+      "byteOffset": 1235592,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 448816,
+      "byteOffset": 1908816,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 2357632,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/TomMcKendrick_Sketchfab_3_Material_u1_v1_baseColor.png"
+    },
+    {
+      "uri": "textures/TomMcKendrick_Sketchfab_3_Material_u1_v1_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/TomMcKendrick_Sketchfab_3_Material_u1_v1_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "TomMcKendrick_Sketchfab_3_Material_u1_v1",
+      "normalTexture": {
+        "index": 2,
+        "scale": 1,
+        "texCoord": 0
+      },
+      "occlusionTexture": {
+        "index": 1,
+        "strength": 1,
+        "texCoord": 0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 0,
+          "texCoord": 0
+        },
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 1,
+          "texCoord": 0
+        },
+        "roughnessFactor": 0.89297135964975516
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "default_TomMcKendrick_Sketchfab_3_Material_u1_v1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4,
+            "TEXCOORD_2": 5
+          },
+          "indices": 6,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "42b14700a2414c13bb547d6c2c10b3ea.fbx"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2.2204460492503131e-16,
+        -1,
+        0,
+        0,
+        1,
+        2.2204460492503131e-16,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "default"
+    },
+    {
+      "mesh": 0,
+      "name": "default_TomMcKendrick_Sketchfab_3_Material_u1_v1_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ]
+}
+
