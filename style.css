@@ -33,7 +33,7 @@ h1, h2, h3, blockquote {
 
 	header {
 		background: var(--dark-bg);
-		grid-column: 2 / span 5; /*start at 2nd columm ,let it span 5 columns*/
+		grid-column: 2 / span 10; /*start at 2nd columm ,let it span 5 columns*/
 		font-size: 2.5rem;
 		padding: 2rem;
 		margin-bottom: var(--spacing);
