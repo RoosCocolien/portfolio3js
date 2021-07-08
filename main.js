@@ -1,12 +1,12 @@
 import './style.css';
 import * as THREE from 'three';
-import CameraControls from 'camera-controls';
+// import CameraControls from 'camera-controls';
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
 import { STLLoader } from './node_modules/three/examples/jsm/loaders/STLLoader';
 import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader';
 import { CubeCamera } from 'three';
 
-CameraControls.install({THREE: THREE});
+// CameraControls.install({THREE: THREE});
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 600);
@@ -18,7 +18,8 @@ renderer.setPixelRatio(window.devicePixelRatio);
 // renderer.setClearColor(scene.fog.color);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
+camera.position.z = 24;
+camera.rotation.z = 180 * (Math.PI / 180);
 const floorHeight = -10;
 const objectHeight = 0;
 
@@ -46,10 +47,11 @@ let skybox = new THREE.Mesh(skyboxGeo, materialArr);
 scene.add(skybox);
 
 const pointLight = new THREE.PointLight(0xFFFFFF);
-pointLight.position.set(20, 20, 20);
+// const pointLight2 = new THREE.PointLight(0xFFFFFF);
+pointLight.position.set(30, 30, 30);
 const ambientLight = new THREE.AmbientLight(0xFFFFFF);
 // scene.add(pointLight, ambientLight);
-scene.add(ambientLight);
+scene.add(pointLight, ambientLight);
 
 // const pointlightHelper = new THREE.PointLightHelper(pointLight);
 // scene.add(pointlightHelper, gridHelper);
@@ -75,71 +77,117 @@ grassSurface.rotation.x = 270 * (Math.PI / 180);
 grassSurface.position.y = floorHeight;
 scene.add(grassSurface);
 
+function createTube() {
+	const tube = new THREE.Mesh(
+		new THREE.BoxGeometry(1.5, 0.3, 0.3),
+		new THREE.MeshPhongMaterial({color: 0x00dd00}) //0x435163
+	)
+	// tube.rotation.x = 30 * (Math.PI / 180);
+	return tube;
+}
+
 //BIKE
-const hulahoopTexture = new THREE.TextureLoader().load('textures/yellow_red_stripes.jpeg', function (hulahoopTexture) {
-	hulahoopTexture.wrapS = hulahoopTexture.wrapT = THREE.RepeatWrapping;
-	hulahoopTexture.repeat.set(8, 0.3);
-});
-const wheel1 = new THREE.Mesh(
-	new THREE.TorusGeometry(2, 0.1, 8, 100),
-	new THREE.MeshBasicMaterial({ map: hulahoopTexture})
-)
-const wheel2 = new THREE.Mesh(
-	new THREE.TorusGeometry(2, 0.1, 8, 100),
-	new THREE.MeshBasicMaterial({ map: hulahoopTexture})	
-)
-wheel1.position.x = 0;
-wheel1.position.z = 20;
-wheel1.position.y = objectHeight;
-wheel2.position.x = 4;
-wheel2.position.z = 20;
-wheel2.position.y = objectHeight;
-// bike.rotation.x = 30;
-scene.add(wheel1, wheel2);
+function createBicycle()
+{
+	const bicycle = new THREE.Group();
+	const hulahoopTexture = new THREE.TextureLoader().load('textures/yellow_red_stripes.jpeg', function (hulahoopTexture) {
+		hulahoopTexture.wrapS = hulahoopTexture.wrapT = THREE.RepeatWrapping;
+		hulahoopTexture.repeat.set(8, 0.3);
+	});
+	const wheel1 = new THREE.Mesh(
+		new THREE.TorusGeometry(2, 0.1, 8, 100),
+		new THREE.MeshBasicMaterial({ map: hulahoopTexture})
+	)
+	const wheel2 = new THREE.Mesh(
+		new THREE.TorusGeometry(2, 0.1, 8, 100),
+		new THREE.MeshBasicMaterial({ map: hulahoopTexture})	
+	)
+	const tube1 = createTube();
+	const tube2 = createTube();
+	const tube3 = createTube();
+	const tube4 = createTube();
+	const tube5 = createTube();
+	wheel1.position.x = 0;
+	wheel1.position.z = 20;
+	wheel1.position.y = objectHeight;
+	wheel2.position.x = 5;
+	wheel2.position.z = 20;
+	wheel2.position.y = objectHeight;
+
+	tube1.position.x = 4;
+	tube1.position.z = 20;
+	tube1.position.y = objectHeight;
+	tube2.position.x = 3;
+	tube2.position.z = 20;
+	tube2.position.y = objectHeight;
+	tube2.rotation.z = 135 * (Math.PI / 180);
+	tube3.position.x = 3;
+	tube3.position.z = 20;
+	tube3.position.y = objectHeight;
+	tube4.position.x = 3;
+	tube4.position.z = 20;
+	tube4.position.y = objectHeight;
+	tube5.position.x = 3;
+	tube5.position.z = 20;
+	tube5.position.y = objectHeight;
+	bicycle.add(wheel1, wheel2, tube1, tube2, tube3, tube4, tube5);
+	return (bicycle);
+}
+
+const bicycle = createBicycle();
+scene.add(bicycle);
 
 //CHURCH
-const stoneTexture = new THREE.TextureLoader().load('textures/stones.jpeg', function (stoneTexture) {
-	stoneTexture.wrapS = stoneTexture.wrapT = THREE.RepeatWrapping;
-	stoneTexture.repeat.set(2, 2);
-});
-const roofTexture = new THREE.TextureLoader().load('textures/roof_tiles.jpeg', function (roofTexture) {
-	roofTexture.wrapS = roofTexture.wrapT = THREE.RepeatWrapping;
-	roofTexture.repeat.set(2, 2);
-})
-const church = new THREE.Mesh(
-	new THREE.BoxGeometry(10, 5, 5),
-	new THREE.MeshLambertMaterial({ map: stoneTexture})
-)
-church.position.x = 0;
-church.position.z = -20;
-church.position.y = objectHeight;
-// church.rotation.y = 30 * (Math.PI / 180);
-const roof = new THREE.Mesh(
-	new THREE.BoxGeometry(5, 3.8, 3.8),
-	new THREE.MeshLambertMaterial({ map: roofTexture})
-)
-roof.position.x = 2.4;
-roof.position.z = -20;
-roof.position.y = objectHeight + 2.4;
-// roof.rotation.z = 90 * (Math.PI / 180);
-// roof.rotation.y = 30 * (Math.PI / 180);
-roof.rotation.x = 45 * (Math.PI / 180);
-const tower = new THREE.Mesh(
-	new THREE.BoxGeometry(5, 7, 5),
-	new THREE.MeshLambertMaterial({map:stoneTexture})
-)
-tower.position.x = -2.5;
-tower.position.z = -20;
-tower.position.y = objectHeight + 5;
-const towerTop = new THREE.Mesh(
-	new THREE.ConeGeometry(4, 4, 4),
-	new THREE.MeshLambertMaterial({map: roofTexture})
-)
-towerTop.position.x = -2.5;
-towerTop.position.z = -20;
-towerTop.position.y = objectHeight + 10.5;
-towerTop.rotation.y = 45 * (Math.PI / 180);
-scene.add(church, roof, tower, towerTop);
+function createChurch() {
+	const church = new THREE.Group();
+
+	const stoneTexture = new THREE.TextureLoader().load('textures/stones.jpeg', function (stoneTexture) {
+		stoneTexture.wrapS = stoneTexture.wrapT = THREE.RepeatWrapping;
+		stoneTexture.repeat.set(2, 2);
+	});
+	const roofTexture = new THREE.TextureLoader().load('textures/roof_tiles.jpeg', function (roofTexture) {
+		roofTexture.wrapS = roofTexture.wrapT = THREE.RepeatWrapping;
+		roofTexture.repeat.set(2, 2);
+	})
+	const building = new THREE.Mesh(
+		new THREE.BoxGeometry(10, 5, 5),
+		new THREE.MeshBasicMaterial({ map: stoneTexture})
+	)
+	building.position.x = 0;
+	building.position.z = -20;
+	building.position.y = objectHeight;
+	// church.rotation.y = 30 * (Math.PI / 180);
+	const roof = new THREE.Mesh(
+		new THREE.BoxGeometry(5, 3.8, 3.8),
+		new THREE.MeshBasicMaterial({ map: roofTexture})
+	)
+	roof.position.x = 2.4;
+	roof.position.z = -20;
+	roof.position.y = objectHeight + 2.4;
+	// roof.rotation.z = 90 * (Math.PI / 180);
+	// roof.rotation.y = 30 * (Math.PI / 180);
+	roof.rotation.x = 45 * (Math.PI / 180);
+	const tower = new THREE.Mesh(
+		new THREE.BoxGeometry(5, 7, 5),
+		new THREE.MeshBasicMaterial({map:stoneTexture})
+	)
+	tower.position.x = -2.5;
+	tower.position.z = -20;
+	tower.position.y = objectHeight + 6;
+	const towerTop = new THREE.Mesh(
+		new THREE.ConeGeometry(4, 4, 4),
+		new THREE.MeshLambertMaterial({map: roofTexture})
+	)
+	towerTop.position.x = -2.5;
+	towerTop.position.z = -20;
+	towerTop.position.y = objectHeight + 11.5;
+	towerTop.rotation.y = 45 * (Math.PI / 180);
+	church.add(building, roof, tower, towerTop);
+	return (church);
+}
+
+const church = createChurch();
+scene.add(church);
 
 
 
@@ -324,8 +372,8 @@ function moveCamera() {
 		camera.position.y = (topValue * 0.0002);
 	}
 }
-moveCamera();
-document.body.onscroll = moveCamera;
+// moveCamera();
+// document.body.onscroll = moveCamera;
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
