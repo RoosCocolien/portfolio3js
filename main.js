@@ -13,15 +13,13 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({
 	canvas: document.querySelector('#background'),
 });
-// scene.fog = new THREE.FogExp2(0x11111f, 0.002);
 renderer.setPixelRatio(window.devicePixelRatio);
-// renderer.setClearColor(scene.fog.color);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-camera.position.z = 24;
-camera.rotation.z = 180 * (Math.PI / 180);
+camera.position.z = 1;
+camera.rotation.z = 45 * (Math.PI / 180);
 const floorHeight = -10;
-const objectHeight = 0;
+const objectHeight = -5;
 
 //SKYBOX
 let materialArr = [];
@@ -77,70 +75,80 @@ grassSurface.rotation.x = 270 * (Math.PI / 180);
 grassSurface.position.y = floorHeight;
 scene.add(grassSurface);
 
-function createTube() {
-	const tube = new THREE.Mesh(
-		new THREE.BoxGeometry(1.5, 0.3, 0.3),
-		new THREE.MeshPhongMaterial({color: 0x00dd00}) //0x435163
-	)
-	// tube.rotation.x = 30 * (Math.PI / 180);
-	return tube;
-}
 
-//BIKE
-function createBicycle()
+function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 {
-	const bicycle = new THREE.Group();
-	const hulahoopTexture = new THREE.TextureLoader().load('textures/yellow_red_stripes.jpeg', function (hulahoopTexture) {
-		hulahoopTexture.wrapS = hulahoopTexture.wrapT = THREE.RepeatWrapping;
-		hulahoopTexture.repeat.set(8, 0.3);
+	let model;
+	const textureLoader = new THREE.TextureLoader().load(textureFile);
+	const materialObject = new THREE.MeshPhongMaterial({
+		map: textureLoader
 	});
-	const wheel1 = new THREE.Mesh(
-		new THREE.TorusGeometry(2, 0.1, 8, 100),
-		new THREE.MeshBasicMaterial({ map: hulahoopTexture})
+	const loaderObject = new OBJLoader();
+	loaderObject.load(objectFile,
+		function (objectModel) {
+			objectModel.traverse(function (node) {
+				if (node.isMesh) {
+					node.material = materialObject;
+					node.scale.set(scale, scale, scale);
+					node.position.set(x, y, z);
+					node.rotation.y = 144 * (Math.PI / 180);
+				}
+			})
+			model = objectModel;
+			scene.add(model);
+			
+		},
+		function (xhr) {
+			console.log(('Bicycle ' + xhr.loaded / xhr.total * 100) + '% loaded' );
+		},
+		function (err) {
+			console.log('Error occurred: ' + err);
+		}
 	)
-	const wheel2 = new THREE.Mesh(
-		new THREE.TorusGeometry(2, 0.1, 8, 100),
-		new THREE.MeshBasicMaterial({ map: hulahoopTexture})	
-	)
-	const tube1 = createTube();
-	const tube2 = createTube();
-	const tube3 = createTube();
-	const tube4 = createTube();
-	const tube5 = createTube();
-	wheel1.position.x = 0;
-	wheel1.position.z = 20;
-	wheel1.position.y = objectHeight;
-	wheel2.position.x = 5;
-	wheel2.position.z = 20;
-	wheel2.position.y = objectHeight;
-
-	tube1.position.x = 4;
-	tube1.position.z = 20;
-	tube1.position.y = objectHeight;
-	tube2.position.x = 3;
-	tube2.position.z = 20;
-	tube2.position.y = objectHeight;
-	tube2.rotation.z = 135 * (Math.PI / 180);
-	tube3.position.x = 3;
-	tube3.position.z = 20;
-	tube3.position.y = objectHeight;
-	tube4.position.x = 3;
-	tube4.position.z = 20;
-	tube4.position.y = objectHeight;
-	tube5.position.x = 3;
-	tube5.position.z = 20;
-	tube5.position.y = objectHeight;
-	bicycle.add(wheel1, wheel2, tube1, tube2, tube3, tube4, tube5);
-	return (bicycle);
+	return (model);
 }
 
-const bicycle = createBicycle();
-scene.add(bicycle);
+//COMPUTER
+function createComputer() {
+	const computer = new THREE.Group();
+	const materialComputer = new THREE.MeshPhongMaterial({color : 0x4b5661});
+	const materialKeyBlue = new THREE.MeshPhongMaterial({color: 0x003cff});
+	const materialKeyGreen = new THREE.MeshPhongMaterial({color: 0x009c2f});
+	const materialKeyRed = new THREE.MeshPhongMaterial({color: 0x910c00});
+	const materialScreen = new THREE.MeshPhongMaterial({color: 0x5a9190});
+	//keyboard
+	const keyboard = new THREE.Mesh(new THREE.BoxGeometry(5, 0.5, 3), materialComputer);
+	keyboard.position.y = objectHeight;
+	const keyGeo = new THREE.BoxGeometry(1, 1, 1);
+	const keyBlue = new THREE.Mesh(keyGeo, materialKeyBlue);
+	keyBlue.position.y = objectHeight + 0.3;
+	keyBlue.position.x = -1.5;
+	const keyGreen = new THREE.Mesh(keyGeo, materialKeyGreen);
+	keyGreen.position.y = objectHeight + 0.3;
+	const keyRed = new THREE.Mesh(keyGeo, materialKeyRed);
+	keyRed.position.y = objectHeight + 0.3;
+	keyRed.position.x = 1.5;
+	//desktop
+	const base = new THREE.Mesh(new THREE.CylinderGeometry(1.7, 1.7, 0.5, 21, 1), materialComputer);
+	base.position.z = -5;
+	base.position.y = objectHeight;
+	const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.5, 21, 1), materialComputer);
+	neck.position.z = -5;
+	neck.position.y = objectHeight + 1;
+	const computerBox = new THREE.Mesh(new THREE.BoxGeometry(9, 5, 2), materialComputer);
+	computerBox.position.z = -5;
+	computerBox.position.y = objectHeight + 4;
+	const screen = new THREE.Mesh(new THREE.BoxGeometry(8, 4.5, 0.5), materialScreen);
+	screen.position.z = -3.9;
+	screen.position.y = objectHeight + 4.1;
+	computer.add(keyboard,keyBlue,keyGreen,keyRed, base, neck, computerBox, screen);
+	return (computer);
+}
 
 //CHURCH
 function createChurch() {
 	const church = new THREE.Group();
-
+	
 	const stoneTexture = new THREE.TextureLoader().load('textures/stones.jpeg', function (stoneTexture) {
 		stoneTexture.wrapS = stoneTexture.wrapT = THREE.RepeatWrapping;
 		stoneTexture.repeat.set(2, 2);
@@ -152,15 +160,15 @@ function createChurch() {
 	const building = new THREE.Mesh(
 		new THREE.BoxGeometry(10, 5, 5),
 		new THREE.MeshBasicMaterial({ map: stoneTexture})
-	)
-	building.position.x = 0;
-	building.position.z = -20;
-	building.position.y = objectHeight;
-	// church.rotation.y = 30 * (Math.PI / 180);
-	const roof = new THREE.Mesh(
-		new THREE.BoxGeometry(5, 3.8, 3.8),
-		new THREE.MeshBasicMaterial({ map: roofTexture})
-	)
+		)
+		building.position.x = 0;
+		building.position.z = -20;
+		building.position.y = objectHeight;
+		// church.rotation.y = 30 * (Math.PI / 180);
+		const roof = new THREE.Mesh(
+			new THREE.BoxGeometry(5, 3.8, 3.8),
+			new THREE.MeshBasicMaterial({ map: roofTexture})
+			)
 	roof.position.x = 2.4;
 	roof.position.z = -20;
 	roof.position.y = objectHeight + 2.4;
@@ -177,62 +185,84 @@ function createChurch() {
 	const towerTop = new THREE.Mesh(
 		new THREE.ConeGeometry(4, 4, 4),
 		new THREE.MeshLambertMaterial({map: roofTexture})
-	)
+		)
 	towerTop.position.x = -2.5;
 	towerTop.position.z = -20;
 	towerTop.position.y = objectHeight + 11.5;
 	towerTop.rotation.y = 45 * (Math.PI / 180);
 	church.add(building, roof, tower, towerTop);
+	church.position.x = 0;
 	return (church);
 }
+		
+		
+		
+//gearWheel
+function createGearBox(texture) {
+	const gearBox = new THREE.Mesh(
+		new THREE.CylinderGeometry(0.7, 1, 1.5, 6, 1),
+		new THREE.MeshPhongMaterial( {map: texture} )
+	)
+	return (gearBox);
+} 
+	
+function createGearWheel() {
+	const gearWheel = new THREE.Group();
+	const gearWheelTexture = new THREE.TextureLoader().load('textures/submarine.jpeg');
+	const box1 = createGearBox(gearWheelTexture);
+	box1.position.y = 3.75;
+	const box2 = createGearBox(gearWheelTexture);
+	box2.rotation.z = 45 * (Math.PI / 180);
+	box2.position.y = 2.75;
+	box2.position.x = -2.75
+	const box3 = createGearBox(gearWheelTexture);
+	box3.rotation.z = 90 * (Math.PI / 180);
+	box3.position.y = 0;
+	box3.position.x = -3.75
+	const box4 = createGearBox(gearWheelTexture);
+	box4.rotation.z = 135 * (Math.PI / 180);
+	box4.position.y = -2.75;
+	box4.position.x = -2.75;
+	const box5 = createGearBox(gearWheelTexture);
+	box5.rotation.z = 180 * (Math.PI / 180);
+	box5.position.y = -3.75;
+	box5.position.x = 0;
+	const box6 = createGearBox(gearWheelTexture);
+	box6.rotation.z = 225 * (Math.PI / 180);
+	box6.position.y = -2.75;
+	box6.position.x = 2.75
+	const box7 = createGearBox(gearWheelTexture);
+	box7.rotation.z = 270 * (Math.PI / 180);
+	box7.position.y = 0;
+	box7.position.x = 3.75
+	const box8 = createGearBox(gearWheelTexture);
+	box8.rotation.z = 315 * (Math.PI / 180);
+	box8.position.y = 2.75;
+	box8.position.x = 2.75
+	const innerWheel = new THREE.Mesh(
+		new THREE.TorusGeometry(3, 1, 4, 8, 6.3),
+		new THREE.MeshPhongMaterial( {map: gearWheelTexture})
+		)
+	gearWheel.add(box1, box2, box3, box4, box5, box6, box7, box8, innerWheel);
+	return (gearWheel);
+}
+const gearWheel = createGearWheel();
+gearWheel.position.set(19, objectHeight, -6.18);
+gearWheel.rotation.y = 288 * (Math.PI / 180);
+	
 
+	
+// createBicycleAddToScene();
+createModelAddToScene('models/rock/textures/Rock_6_d.jpg','models/rock/Rock_6.OBJ', 5, -19, objectHeight, -6.18);
+createModelAddToScene('models/bicycle2/textures/bicycle2_BaseColor.png','models/bicycle2/bicycle2_002.obj', 0.2, 14.18, objectHeight - 2, 13.76);
+const computer = createComputer();
 const church = createChurch();
+computer.position.set(-14.18, objectHeight + 4, 13.76);
+computer.rotation.y = 130 * (Math.PI / 180);
+scene.add(computer);
 scene.add(church);
-
-
-
-
-// var bubbles = [];
-// function createBubbles() {
-// 	var bubble, geoBubble, material;
-// 	for (var zpos = -100 ; zpos < 75; zpos+=3) {
-// 		geoBubble = new THREE.SphereGeometry(1, 50, 50);
-// 		material = new THREE.MeshPhongMaterial({
-// 			color: 0x42f5cb,
-// 			opacity: 0.9,
-// 		})
-// 		bubble = new THREE.Mesh(geoBubble, material);
-// 		bubble.position.x = Math.random() * 150 - (Math.random() * 150);
-// 		bubble.position.y = Math.random() * 200 - 30;
-// 		bubble.position.z = zpos;
-// 		scene.add(bubble)
-// 		bubbles.push(bubble);
-// 	}
-// }
-
-// function updateBubbles() {
-// 	//iterate through every bubble
-// 	var bubble;
-// 	var increment;
-// 	for (var i = 0; i < bubbles.length; i++) {
-// 		bubble = bubbles[i];
-// 		//move it upwards
-// 		if (i % 3 === 0) {
-// 			increment = 0.3;
-// 		} else if (i % 3 === 1) {
-// 			increment = 0.6;
-// 		} else {
-// 			increment = 2;
-// 		}
-// 		bubble.position.y += increment;
-// 		if (bubble.position.y > 75)
-// 			bubble.position.y = -50;
-// 	}
-// }
-// createBubbles();
-
-
-
+scene.add(gearWheel);
+	
 // const spaceTexture = new THREE.TextureLoader().load('textures/underwater_wallpaper.jpeg');
 // scene.background = spaceTexture;
 
@@ -363,17 +393,17 @@ function moveCamera() {
 
 	//the top value will always be negative so multiple it by a negative number
 	if (topValue < 0) {
-		camera.position.z = (topValue * -0.02);
-		camera.position.x = (topValue * -0.0004);
-		camera.position.y = (topValue * -0.0002);
+		camera.position.z = (topValue * -0.005);
+		camera.position.x = (topValue * -0.0001);
+		camera.position.y = (topValue * -0.00005);
 	} else {
-		camera.position.z = (topValue * 0.02);
-		camera.position.x = (topValue * 0.0004);
-		camera.position.y = (topValue * 0.0002);
+		camera.position.z = (topValue * 0.005);
+		camera.position.x = (topValue * 0.0001);
+		camera.position.y = (topValue * 0.00005);
 	}
 }
-// moveCamera();
-// document.body.onscroll = moveCamera;
+moveCamera();
+document.body.onscroll = moveCamera;
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
