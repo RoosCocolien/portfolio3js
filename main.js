@@ -53,8 +53,8 @@ scene.add(pointLight, ambientLight);
 
 // const pointlightHelper = new THREE.PointLightHelper(pointLight);
 // scene.add(pointlightHelper, gridHelper);
-const gridHelper = new THREE.GridHelper(200,50);
-scene.add(gridHelper);
+// const gridHelper = new THREE.GridHelper(200,50);
+// scene.add(gridHelper);
 
 //This will listen to Dom events on the mouse and update the camera position accordingly
 //we then need to call controls.update() in the game loop (animation loop)
