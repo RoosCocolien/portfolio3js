@@ -323,6 +323,25 @@ function moveCamera() {
 // moveCamera();
 // document.body.onscroll = moveCamera;
 
+const welcomeDiv = document.getElementById("textWelcome");
+const welcomeBtn = document.getElementById("yesButton");
+welcomeBtn.onclick = function () {
+	if (welcomeDiv.style.display !== "none") {
+		welcomeDiv.style.display = "none";
+	} else {
+		welcomeDiv.style.display = "block";
+	}
+}
+const churchDiv = document.getElementById("textChurch");
+const exitBtn = document.getElementById("exitButton");
+exitBtn.onclick = function () {
+	if (churchDiv.style.display !== "none") {
+		churchDiv.style.display = "none";
+	} else {
+		churchDiv.style.display = "block";
+	}
+}
+
 console.log(scene.children);
 
 function onDocumentMouseClick(event) {
@@ -338,7 +357,7 @@ function onDocumentMouseClick(event) {
 		if (intersects[i].object.uuid == churchObject.uuid) {
 			console.log('Welcome to the church');
 			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
-
+			document.getElementById("textChurch").style.display = "block";
 		}
 		else if (intersects[i].object.uuid == gearObject.uuid) {
 			console.log('Welkom to the building');

@@ -29,7 +29,7 @@ main {
 	text-align: right;
 }
 
-.exitButton {
+#exitButton {
 	border: 3px outset var(--dark-bg);
 	background-color: transparent;
 	height: 50px;
@@ -43,7 +43,7 @@ main {
 	transition: all 0.3s ease;
 }
 
-.exitButton:hover {
+#exitButton:hover {
 	background-color: red;
 	color: white;
 }
@@ -52,7 +52,7 @@ main {
 	text-align: center;
 }
 
-.yesButton {
+#yesButton {
 	outline: none;
 	height: 40px;
 	text-align: center;
@@ -68,13 +68,13 @@ main {
 	transition: all 0.3s ease;
 }
 
-.yesButton:hover {
+#yesButton:hover {
 	color: white;
 	background: rgb(10,88, 0);
 }
 
 #textWelcome {
-	display: none;
+	display: block;
 }
 
 #textBlockquote1 {
