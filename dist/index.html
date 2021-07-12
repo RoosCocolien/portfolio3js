@@ -5,51 +5,120 @@
 		<link rel="icon" type="image/svg+xml" href="/assets/favicon.08685d4c.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Roos Cocolien</title>
-	<script type="module" crossorigin src="/assets/index.c8df60c5.js"></script>
-  <link rel="modulepreload" href="/assets/vendor.baf520a5.js">
-  <link rel="stylesheet" href="/assets/index.9b83061a.css">
+	<script type="module" crossorigin src="/assets/index.4fe1b6fd.js"></script>
+  <link rel="modulepreload" href="/assets/vendor.a5ea365b.js">
+  <link rel="stylesheet" href="/assets/index.a9db3e70.css">
 </head>
 	<body>
 		<canvas id="background"></canvas>
 		<div id="app"></div>
 		<main>
-			<header>
+			<header id="textWelcome">
 				<h2>Welcome to my Digital World</h2>
 				<p>
 					This is my digital playground to experiment with Three.js.
-					It is under construction, so come back soon!
 					<br>
-					Latest update: July 9th, 2021
+					Latest update: July 12th, 2021
 					<br>
 					<br>
 					Roos Cocolien
+					<br>
+					<br>
+					Would you like to get to know me?
 				</p>
-				<!-- <p>
-					<button>YES</button>
-				</p> -->
+				<div class="bottomButtonDiv">
+					<button class="greenButton" id="yesButton">YES</button>
+				</div>
 			</header>
 
-			<blockquote>
+			<blockquote id="textBlockquote1">
 				<p>I am an aspiring Creative Developer</p>
 			</blockquote>
 
-			<section>
+			<section id="textMenu">
+				<h1>Great!</h1>
+				<p>
+					With <button class="key">A</button> and <button class="key">S</button> you can move around.
+					With <button class="key">R</button> you can "reset" and go back to the church.
+					You can always go back to the menu, by pressing <button class="key">M</button>.
+					<br>
+					Click the objects to learn more about me.
+					<br>
+					<br>
+					Enjoy!
+				</p>
+				<div class="bottomButtonDiv">
+					<button class="greenButton" id="startButton">START</button>
+				</div>
+				<p>
+					Would you like to get in touch?
+					<br>
+					Leave me a message!
+					<br>
+					info@rooscocolien.com
+				</p>
+				<!-- <div class="message">
+					<button class="greenButton" id="messageButton">MESSAGE</button>
+				</div> -->
+			</section>
+
+			<section id="textChurch">
+				<div class="topButtonDiv">
+					<button class="exitButton" id="exitButtonChurch">EXIT</button>
+				</div>
 				<h2>Art History</h2>
 				<p>
 					From a young age I have been surrounded by Art. My artistic mother always inspired me to follow my passion and try out new methods to create art. This creative environment drove me to deepen my theoretical knowledge and study Art History. The Middle Ages have always amazed me. Art was a pure craftmanship and deeply connected to religion. Exploring the paintings, drawings in manuscripts and scultures helped me uncovering the stories of those times. The church resembles this part of my life.
 				</p>
+			</section>
+
+			<section id="textGear">
+				<div class="topButtonDiv">
+					<button class="exitButton" id="exitButtonGear">EXIT</button>
+				</div>
 				<h2>The Gear Wheel</h2>
 				<p>
 					The Gear Wheel is going to tell the story behind the creation of this portfolio. Stay tuned for more info!
 				</p>
+			</section>
+			<section id="textRock">
+				<div class="topButtonDiv">
+					<button class="exitButton" id="exitButtonRock">EXIT</button>
+				</div>
 				<h2>The Rock</h2>
 				<p>
-					The Rock stand for my favorite hobby: climbing.
+					The Rock stands for my favorite hobby: climbing.
 				</p>
 			</section>
 
-			<section class="light">
-				<h2>Tech Stack</h2>
+			
+			<section class="left" id="textPromoTech">
+				<div class="topButtonDiv">
+					<button class="exitButton" id="exitButtonComputer">EXIT</button>
+				</div>
+				<h2>Promoting Tech</h2>
+				<p>
+					Since I have entered the world of IT I have been amazed by the variety of the industry and community. Especially the women in tech communities. My passion for diversity and inclusivity, together with my eagerness to contribute to society, led to the collaboration with the platform “TekkieWorden”. I created vlogs and videos about my exploration of the IT world with the aim to inspire and motivate people to choose a career in IT.
+					<br>
+					<br>
+					Do you see the computer on the left? In the future you will be able to press the colored buttons and watch videos.
+				</p>
+			</section>
+
+			<section class="light" id="textFavoProjects">
+				<h2>Favorite Projects</h2>
+				<h3>TekkieWorden</h3>
+				<p>
+					For TekkieWorden I have developed an assessment tool. This is a quiz in which the candidate discovers what kind of IT role suits them best. This project allowed me the opportunity to put all my newly gained skills to the test. Teaching myself HTML, CSS, and JavaScript and diving into React, NodeJS, and MySQL drives me in my further advancement to become a creative developer.
+				</p>
+				<h3>Codam Coding College</h3>
+				<p>
+					At Codam Coding College, together with 4 peers I have worked on a game angine based on the technisch used in Doom and Duke Nukem. Instead of only focusing on our coding skills, we got inspired by the creative skills of each other and used those to put something extra into our project: our own composed music, hand drawn textures (for the walls and the sprites), a creative storyline and a focus on inclusivity (the possibility to choose a different skin tone for the player).
+				</p>
+			</section>
+
+			<section class="light textTechStack" id="textTechStack" >
+				<h2>My Tech Stack</h2>
 				<p>
 					<ul>
 						<li>HTML</li>
@@ -65,24 +134,15 @@
 				</p>
 			</section>
 
-			<section class="light">
-				<h2>Favorite Projects</h2>
-				<h3>TekkieWorden</h3>
-				<p>
-					For TekkieWorden I have developed an assessment tool. This is a quiz in which the candidate discovers what kind of IT role suits them best. This project allowed me the opportunity to put all my newly gained skills to the test. Teaching myself HTML, CSS, and JavaScript and diving into React, NodeJS, and MySQL drives me in my further advancement to become a creative developer.
-				</p>
-				<h3>Codam Coding College</h3>
-				<p>
-					At Codam Coding College, together with 4 peers I have worked on a game angine based on the technisch used in Doom and Duke Nukem. Instead of only focusing on our coding skills, we got inspired by the creative skills of each other and used those to put something extra into our project: our own composed music, hand drawn textures (for the walls and the sprites), a creative storyline and a focus on inclusivity (the possibility to choose a different skin tone for the player).
-				</p>
-			</section>
-
-			<blockquote>
+			<blockquote id="textBlockquote2">
 				<p>Keep on scrolling to learn more!</p>
 			</blockquote>
 
 			
-			<section class="light">
+			<section class="light" id="otherHobbies">
+				<div class="topButtonDiv">
+					<button class="exitButton" id="exitButtonHobbies">EXIT</button>
+				</div>
 				<h2>Other Hobbies</h2>
 				<h3>Long distance cycling</h3>
 				<p>
@@ -93,21 +153,12 @@
 				</p>
 			</section>
 			
-			<section class="left">
-				<h2>Promoting Tech</h2>
-				<p>
-					Since I have entered the world of IT I have been amazed by the variety of the industry and community. Especially the women in tech communities. My passion for diversity and inclusivity, together with my eagerness to contribute to society, led to the collaboration with the platform “TekkieWorden”. I created vlogs and videos about my exploration of the IT world with the aim to inspire and motivate people to choose a career in IT.
-					<br>
-					<br>
-					Do you see the computer on the left? In the future you will be able to press the colored buttons and watch videos.
-				</p>
-			</section>
 
-			<blockquote>
+			<blockquote id="textThanks">
 				<p>I hope you've enjoyed my website!</p>
 			</blockquote>
 
-			<section class="light">
+			<section class="light" id="textQuestions">
 				<h2>Questions?</h2>
 				<h3>Reach out to me!</h3>
 				<p>

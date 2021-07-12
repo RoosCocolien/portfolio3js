@@ -104,7 +104,7 @@ function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 			
 		},
 		function (xhr) {
-			console.log(('Bicycle ' + xhr.loaded / xhr.total * 100) + '% loaded');
+			console.log(('Object ' + xhr.loaded / xhr.total * 100) + '% loaded');
 		},
 		function (err) {
 			console.log('Error occurred: ' + err);
@@ -198,7 +198,6 @@ function createChurch() {
 	church.add(building, roof, tower, towerTop);
 	church.position.x = 0;
 	church.rotation.y = 5 * (Math.PI / 180);
-	church.name = "church";
 	return (church);
 }
 		
@@ -373,35 +372,35 @@ const exitBtnRock = document.getElementById("exitButtonRock");
 const exitBtnHobbies = document.getElementById("exitButtonHobbies");
 const exitBtnComputer = document.getElementById("exitButtonComputer");
 exitBtnChurch.onclick = function () {
-	console.log('exit is pressed');
+	// console.log('exit is pressed');
 	if (churchDiv.style.display !== "none") {
 		churchDiv.style.display = "none";
 		activateInteraction();
 	}
 }
 exitBtnGear.onclick = function () {
-	console.log('exit is pressed');
+	// console.log('exit is pressed');
 	if (gearDiv.style.display !== "none") {
 		gearDiv.style.display = "none";
 		activateInteraction();
 	}
 }
 exitBtnRock.onclick = function () {
-	console.log('exit is pressed');
+	// console.log('exit is pressed');
 	if (rockDiv.style.display !== "none") {
 		rockDiv.style.display = "none";
 		activateInteraction();
 	}
 }
 exitBtnHobbies.onclick = function () {
-	console.log('exit is pressed');
+	// console.log('exit is pressed');
 	if (otherHobbies.style.display !== "none") {
 		otherHobbies.style.display = "none";
 		activateInteraction();
 	}
 }
 exitBtnComputer.onclick = function () {
-	console.log('exit is pressed');
+	// console.log('exit is pressed');
 	if (promoDiv.style.display !== "none") {
 		promoDiv.style.display = "none";
 		techStackDiv.style.display = "none";
@@ -428,34 +427,34 @@ function onDocumentMouseClick(event) {
 		raycaster.setFromCamera(mouse, camera);
 		const intersects = raycaster.intersectObjects(scene.children);
 	
-		console.log('length: ' + intersects.length)
+		// console.log('length: ' + intersects.length)
 		for (let i = 0; i < intersects.length; i++) {
 			if (intersects[i].object.uuid == churchObject.uuid) {
 				reading = true;
 				keyboardControls = false;
-				console.log('Welcome to the church');
-				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
+				// console.log('Welcome to the church');
+				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
 				document.getElementById("textChurch").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == gearObject.uuid) {
 				reading = true;
 				keyboardControls = false;
-				console.log('Welkom to the building');
-				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				// console.log('Welkom to the building');
+				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
 				document.getElementById("textGear").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == bicycleObject.uuid) {
 				reading = true;
 				keyboardControls = false;
-				console.log('Welcome to the bicycle');
-				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				// console.log('Welcome to the bicycle');
+				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
 				document.getElementById("otherHobbies").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == computerObject.uuid) {
 				reading = true;
 				keyboardControls = false;
-				console.log('Welcome to the computer');
-				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				// console.log('Welcome to the computer');
+				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
 				document.getElementById("textPromoTech").style.display = "block";
 				document.getElementById("textTechStack").style.display = "block";
 				document.getElementById("textFavoProjects").style.display = "block";
@@ -463,8 +462,8 @@ function onDocumentMouseClick(event) {
 			else if (intersects[i].object.uuid == rockObject.uuid) {
 				reading = true;
 				keyboardControls = false;
-				console.log('Welcome to the climbing spot');
-				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				// console.log('Welcome to the climbing spot');
+				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
 				document.getElementById("textRock").style.display = "block";
 			}
 		}
@@ -497,7 +496,7 @@ function resetCameraPosition() {
 
 //37 left, 38 up, 39 right, 40 down, 114 reset, 97 A, 100 D, 119 W, 115 S
 function onKeyPress(event) {
-	console.log('keypress ', event.keyCode)
+	// console.log('keypress ', event.keyCode)
 	if (keyboardControls && !reading) {
 		// if (event.keyCode == 115) {
 		// 	camera.rotation.x += 0.01;
