@@ -1,10 +1,10 @@
 import './style.css';
 import * as THREE from 'three';
 // import CameraControls from 'camera-controls';
-import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
-import { STLLoader } from './node_modules/three/examples/jsm/loaders/STLLoader';
+// import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
+// import { STLLoader } from './node_modules/three/examples/jsm/loaders/STLLoader';
 import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader';
-import { CubeCamera } from 'three';
+// import { CubeCamera } from 'three';
 
 // CameraControls.install({THREE: THREE});
 
@@ -15,11 +15,15 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 document.body.appendChild(renderer.domElement);
-camera.position.z = 1;
-camera.rotation.z = 45 * (Math.PI / 180);
 const floorHeight = -10;
 const objectHeight = -5;
+camera.position.set(0, 0, 0);
+camera.rotation.set(0, 0, 0);
+let keyboardControls = true;
+let resetCamera = false;
 
 //SKYBOX
 let materialArr = [];
@@ -60,7 +64,7 @@ scene.add(pointLight, ambientLight);
 //we then need to call controls.update() in the game loop (animation loop)
 
 //dit moet weer aangezet worden
-const controls = new OrbitControls(camera, renderer.domElement);
+// const controls = new OrbitControls(camera, renderer.domElement);
 
 //GRASS FLOOR
 const beachTexture = new THREE.TextureLoader().load('textures/GrassGreenTexture0006.jpg', function (beachTexture) {
@@ -78,7 +82,7 @@ scene.add(grassSurface);
 
 function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 {
-	let model;
+	let model = new THREE.Mesh;
 	const textureLoader = new THREE.TextureLoader().load(textureFile);
 	const materialObject = new THREE.MeshPhongMaterial({
 		map: textureLoader
@@ -91,7 +95,7 @@ function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 					node.material = materialObject;
 					node.scale.set(scale, scale, scale);
 					node.position.set(x, y, z);
-					node.rotation.y = 144 * (Math.PI / 180);
+					node.rotation.y = 130 * (Math.PI / 180);
 				}
 			})
 			model = objectModel;
@@ -99,7 +103,7 @@ function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 			
 		},
 		function (xhr) {
-			console.log(('Bicycle ' + xhr.loaded / xhr.total * 100) + '% loaded' );
+			console.log(('Bicycle ' + xhr.loaded / xhr.total * 100) + '% loaded');
 		},
 		function (err) {
 			console.log('Error occurred: ' + err);
@@ -192,6 +196,8 @@ function createChurch() {
 	towerTop.rotation.y = 45 * (Math.PI / 180);
 	church.add(building, roof, tower, towerTop);
 	church.position.x = 0;
+	church.rotation.y = 5 * (Math.PI / 180);
+	church.name = "church";
 	return (church);
 }
 		
@@ -247,133 +253,45 @@ function createGearWheel() {
 	return (gearWheel);
 }
 const gearWheel = createGearWheel();
-gearWheel.position.set(19, objectHeight, -6.18);
+gearWheel.position.set(17, objectHeight + 3, -5);
 gearWheel.rotation.y = 288 * (Math.PI / 180);
-	
 
-	
+//create transparant meshes
+function createTransparantMesh(x, y, z) {
+	const object = new THREE.Mesh(
+		new THREE.BoxGeometry(10, 10, 10),
+		new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true})
+	)
+	object.position.set(x, y, z);
+	// object.visible = false;
+	return (object);
+}
+
+// const torusHelper = new THREE.Mesh(
+// 	new THREE.TorusGeometry(20, 1, 16, 100),
+// 	new THREE.MeshBasicMaterial({color: 0xffffff})
+// )
+// torusHelper.rotation.x = 90 * (Math.PI / 180);
+// scene.add(torusHelper);
+
 // createBicycleAddToScene();
-createModelAddToScene('models/rock/textures/Rock_6_d.jpg','models/rock/Rock_6.OBJ', 5, -19, objectHeight, -6.18);
-createModelAddToScene('models/bicycle2/textures/bicycle2_BaseColor.png','models/bicycle2/bicycle2_002.obj', 0.2, 14.18, objectHeight - 2, 13.76);
-const computer = createComputer();
-const church = createChurch();
-computer.position.set(-14.18, objectHeight + 4, 13.76);
+let rock = createModelAddToScene('models/rock/textures/Rock_6_d.jpg','models/rock/Rock_6.OBJ', 5, -19, objectHeight, -6.18);
+let bicycle = createModelAddToScene('models/bicycle2/textures/bicycle2_BaseColor.png','models/bicycle2/bicycle2_002.obj', 0.2, 12, objectHeight - 2, 12);
+let computer = createComputer();
+let church = createChurch();
+computer.position.set(-10, objectHeight + 4, 10);
 computer.rotation.y = 130 * (Math.PI / 180);
 scene.add(computer);
 scene.add(church);
 scene.add(gearWheel);
-	
-// const spaceTexture = new THREE.TextureLoader().load('textures/underwater_wallpaper.jpeg');
-// scene.background = spaceTexture;
 
-//roosCube
-// const roosTexture = new THREE.TextureLoader().load('images/Roos_cube-02.png');
-// const roosCube = new THREE.Mesh(
-// 	new THREE.BoxGeometry(5, 5, 5),
-// 	new THREE.MeshBasicMaterial({ map: roosTexture })
-// )
-// roosCube.position.x = 7;
-// roosCube.position.z = -10;
-// scene.add(roosCube);
-
-//worldSphere
-// const worldDayTexture = new THREE.TextureLoader().load('textures/fish_texture.jpeg');
-// const worldNightTexture = new THREE.TextureLoader().load('textures/2k_earth_nightmap.jpeg');
-// const sunTexture = new THREE.TextureLoader().load('textures/fish_texture_pink.jpeg');
-// const moonTexture = new THREE.TextureLoader().load('textures/submarine.jpeg');
-// const normalTexture = new THREE.TextureLoader().load('textures/2k_earth_normal_map.tif');
-// const worldSphere = new THREE.Mesh(
-// 	new THREE.SphereGeometry(3, 32, 32),
-// 	new THREE.MeshStandardMaterial({
-// 		map: worldDayTexture,
-// 	})
-// )
-// const moonSphere = new THREE.Mesh(
-// 	new THREE.SphereGeometry(4, 32, 32),
-// 	new THREE.MeshStandardMaterial({
-// 		map: moonTexture
-// 	})
-// )
-// const sunSphere = new THREE.Mesh(
-// 	new THREE.SphereGeometry(6, 32, 32),
-// 	new THREE.MeshStandardMaterial({
-// 		map: sunTexture
-// 	})
-// )
-// worldSphere.position.z = 30;
-// worldSphere.position.x = -10;
-// moonSphere.position.z = 40;
-// moonSphere.position.x = 10;
-// moonSphere.position.y = 10;
-// sunSphere.position.z = 100;
-// sunSphere.position.x = -50;
-// sunSphere.position.y = 15;
-// scene.add(worldSphere, sunSphere, moonSphere);
-
-// // //FISHES
-// const textureParasect = new THREE.TextureLoader().load('models/textures/Parasect_pm0047_00_BodyA1.png');
-// const materialParasect = new THREE.MeshPhongMaterial({
-// 	map: textureParasect
-// })
-// const loaderParasect = new OBJLoader();
-// loaderParasect.load(
-// 	'models/Parasect.obj',
-// 	function (objectParasect) {
-// 		objectParasect.traverse(function ( node ) {
-// 			if (node.isMesh) {
-// 				node.material = materialParasect;
-// 			}
-// 		})
-// 		scene.add(objectParasect);
-// 		objectParasect.rotation.x = 30 * (Math.PI / 180);
-// 		objectParasect.position.x = 20
-// 		objectParasect.position.z = 30
-// 		objectParasect.position.y = 0;
-// 	},
-// 	function (xhr) {
-// 		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
-// 	},
-// 	function (error) {
-// 		console.log('An error occurred');
-// 	}
-// )
-
-// var shark;
-// const textureShark = new THREE.TextureLoader().load('models/textures/cartoon_shark.jpg');
-// const materialShark = new THREE.MeshPhongMaterial({
-// 	map: textureShark
-// })
-// const loaderShark = new OBJLoader();
-// loaderShark.load(
-// 	'models/cartoon_shark.obj',
-// 	function (objectShark) {
-// 		objectShark.traverse(function ( node ) {
-// 			if (node.isMesh) {
-// 				node.material = materialShark;
-// 			}
-// 		})
-// 		shark = objectShark;
-// 		scene.add(objectShark);
-// 		objectShark.rotation.x = 30 * (Math.PI / 180);
-// 		objectShark.position.x = 50
-// 		objectShark.position.z = 25
-// 		objectShark.position.y = 3.5;
-// 	},
-// 	function (xhr) {
-// 		console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
-// 	},
-// 	function (error) {
-// 		console.log('An error occurred');
-// 	}
-// )
-
-// function updateShark() {
-// 	if (shark) {
-// 		shark.position.x = 100*Math.cos(t) + 50;
-// 		shark.position.z = 100*Math.sin(t) + -50;
-// 		shark.rotation.y = shark.rotation.y - (0.5 * (Math.PI / 180));
-// 	}
-// }
+//create transp meshes
+const churchObject = createTransparantMesh(0, -2, -20);
+const gearObject = createTransparantMesh(19, -3, -6.18);
+const bicycleObject = createTransparantMesh(15, -2, 13);
+const computerObject = createTransparantMesh(-10, -2, 10);
+const rockObject = createTransparantMesh(-15, -2, -5);
+scene.add(churchObject, gearObject, bicycleObject, computerObject, rockObject);
 
 
 function moveCamera() {
@@ -387,10 +305,10 @@ function moveCamera() {
 	// worldSphere.rotation.y += 0.01;
 	// worldSphere.rotation.z += 0.05;
 	// worldSphere.position.y *= -(topValue)
-
+	
 	// roosCube.rotation.y += 0.01;
 	// roosCube.rotation.z += 0.01;
-
+	
 	//the top value will always be negative so multiple it by a negative number
 	if (topValue < 0) {
 		camera.position.z = (topValue * -0.005);
@@ -402,8 +320,44 @@ function moveCamera() {
 		camera.position.y = (topValue * 0.00005);
 	}
 }
-moveCamera();
-document.body.onscroll = moveCamera;
+// moveCamera();
+// document.body.onscroll = moveCamera;
+
+console.log(scene.children);
+
+function onDocumentMouseClick(event) {
+	event.preventDefault();
+	console.log('( '+ event.clientX + ' ; '+event.clientY+' )');
+	mouse.x = (event.clientX / window.innerWidth) * 2 -1;
+	mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+	raycaster.setFromCamera(mouse, camera);
+	const intersects = raycaster.intersectObjects(scene.children);
+
+	console.log('length: ' + intersects.length)
+	for (let i = 0; i < intersects.length; i++) {
+		if (intersects[i].object.uuid == churchObject.uuid) {
+			console.log('Welcome to the church');
+			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
+
+		}
+		else if (intersects[i].object.uuid == gearObject.uuid) {
+			console.log('Welkom to the building');
+			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+		}
+		else if (intersects[i].object.uuid == bicycleObject.uuid) {
+			console.log('Welcome to the bicycle');
+			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+		}
+		else if (intersects[i].object.uuid == computerObject.uuid) {
+			console.log('Welcome to the computer');
+			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+		}
+		else if (intersects[i].object.uuid == rockObject.uuid) {
+			console.log('Welcome to the climbing spot');
+			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+		}
+	}
+}
 
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -411,7 +365,59 @@ function onWindowResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+function resetCameraPosition() {
+	if (camera.rotation.y > 3.14) {
+		// console.log('test1')
+		camera.rotation.y += 0.1;
+		if (camera.rotation.y >= 360 * (Math.PI / 180))
+			camera.rotation.y = 0;
+	}
+	else if (camera.rotation.y <= 3.14) {
+		// console.log('test2')
+		camera.rotation.y -= 0.1;
+	}
+	if (camera.rotation.y >= -0.1 && camera.rotation.y <= 0.1) {
+		camera.rotation.y = 0;
+		keyboardControls = true;
+		resetCamera = false;
+	}
+}
+
+//37 left, 38 up, 39 right, 40 down, 114 reset, 97 A, 100 D, 119 W, 115 S
+function onKeyPress(event) {
+	console.log('keypress ', event.keyCode)
+	if (keyboardControls) {
+		// if (event.keyCode == 115) {
+		// 	camera.rotation.x += 0.01;
+		// }
+		// if (event.keyCode == 119) {
+		// 	camera.rotation.x -= 0.01;
+		// }
+		if (event.keyCode == 100) {
+			if (camera.rotation.y <= 0) {
+				camera.rotation.y = 360 * (Math.PI / 180);
+			}
+			console.log(camera.rotation.y);
+			camera.rotation.y -= 0.01;
+		}
+		if (event.keyCode == 97) {
+			if (camera.rotation.y >= 360 * (Math.PI / 180)) {
+				camera.rotation.y = 0;
+			}
+			console.log(camera.rotation.y);
+			camera.rotation.y += 0.01;
+		}
+		if (event.keyCode == 114) {
+			keyboardControls = false;
+			resetCamera = true;
+			// resetCameraPosition();
+		}
+	}
+}
+
+window.addEventListener('click', onDocumentMouseClick, false);
 window.addEventListener('resize', onWindowResize, false);
+window.addEventListener('keypress', onKeyPress, false);
 
 
 // let t = 0;
@@ -419,23 +425,14 @@ function animate() {
 	requestAnimationFrame(animate);
 
 	// t += 0.01;
-
 	// moonSphere.position.x = 20*Math.cos(t) + 20;
 	// moonSphere.position.z = 20*Math.sin(t) + 10;
-	// worldSphere.position.x = 50*Math.cos(t) + 5;
-	// worldSphere.position.z = 50*Math.sin(t) + 10;
-	// sunSphere.position.x = 5*Math.cos(t) + -15;
-	// sunSphere.position.y = 5*Math.sin(t) + 0;
-	// objectShark.position.x = 70*Math.cos(t) + 0;
-	// objectShark.position.y = 70*Math.sin(t) + 0;
 
-
-
-	
-	
-	// updateBubbles();
-	// updateShark();
-	controls.update(); //dit moet weer aangezet worden
+	if (resetCamera == true) {
+		resetCameraPosition();
+	}
+	gearWheel.rotation.z += 0.01;
+	// controls.update();
 
 	renderer.render(scene, camera);
 }
