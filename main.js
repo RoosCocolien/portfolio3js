@@ -22,8 +22,9 @@ const floorHeight = -10;
 const objectHeight = -5;
 camera.position.set(0, 0, 0);
 camera.rotation.set(0, 0, 0);
-let keyboardControls = true;
+let keyboardControls = false;
 let resetCamera = false;
+let reading = true;
 
 //SKYBOX
 let materialArr = [];
@@ -263,7 +264,7 @@ function createTransparantMesh(x, y, z) {
 		new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true})
 	)
 	object.position.set(x, y, z);
-	// object.visible = false;
+	object.visible = false;
 	return (object);
 }
 
@@ -294,86 +295,178 @@ const rockObject = createTransparantMesh(-15, -2, -5);
 scene.add(churchObject, gearObject, bicycleObject, computerObject, rockObject);
 
 
-function moveCamera() {
-	//where is the user currently scrolled to? Get the view port.
-	//Call the document body get boudning client rect
-	//that will give us the dimensions of the viewport
-	//the top porperty will show us how far we are from the top of the webpage
-	//from there we can start changing properties on our 3d objects whenever this function is called
-	const topValue = document.body.getBoundingClientRect().top;
-	// worldSphere.rotation.x += 0.05;
-	// worldSphere.rotation.y += 0.01;
-	// worldSphere.rotation.z += 0.05;
-	// worldSphere.position.y *= -(topValue)
+// function moveCamera() {
+// 	//where is the user currently scrolled to? Get the view port.
+// 	//Call the document body get boudning client rect
+// 	//that will give us the dimensions of the viewport
+// 	//the top porperty will show us how far we are from the top of the webpage
+// 	//from there we can start changing properties on our 3d objects whenever this function is called
+// 	const topValue = document.body.getBoundingClientRect().top;
+// 	// worldSphere.rotation.x += 0.05;
+// 	// worldSphere.rotation.y += 0.01;
+// 	// worldSphere.rotation.z += 0.05;
+// 	// worldSphere.position.y *= -(topValue)
 	
-	// roosCube.rotation.y += 0.01;
-	// roosCube.rotation.z += 0.01;
+// 	// roosCube.rotation.y += 0.01;
+// 	// roosCube.rotation.z += 0.01;
 	
-	//the top value will always be negative so multiple it by a negative number
-	if (topValue < 0) {
-		camera.position.z = (topValue * -0.005);
-		camera.position.x = (topValue * -0.0001);
-		camera.position.y = (topValue * -0.00005);
-	} else {
-		camera.position.z = (topValue * 0.005);
-		camera.position.x = (topValue * 0.0001);
-		camera.position.y = (topValue * 0.00005);
-	}
-}
+// 	//the top value will always be negative so multiple it by a negative number
+// 	if (topValue < 0) {
+// 		camera.position.z = (topValue * -0.005);
+// 		camera.position.x = (topValue * -0.0001);
+// 		camera.position.y = (topValue * -0.00005);
+// 	} else {
+// 		camera.position.z = (topValue * 0.005);
+// 		camera.position.x = (topValue * 0.0001);
+// 		camera.position.y = (topValue * 0.00005);
+// 	}
+// }
 // moveCamera();
 // document.body.onscroll = moveCamera;
 
+function scrollBackToTop() {
+	document.body.scrollTop = 0;
+	document.documentElement.scrollTop = 0;
+}
+
+function activateInteraction() {
+	setTimeout(function() {
+		reading = false;
+		keyboardControls = true;
+	}, 1000);
+}
+
 const welcomeDiv = document.getElementById("textWelcome");
+const menuDiv = document.getElementById("textMenu");
 const welcomeBtn = document.getElementById("yesButton");
+const startBtn = document.getElementById("startButton")
 welcomeBtn.onclick = function () {
 	if (welcomeDiv.style.display !== "none") {
 		welcomeDiv.style.display = "none";
+		menuDiv.style.display = "block";
+		scrollBackToTop();
+	} else {
+		welcomeDiv.style.display = "block";
+	}
+}
+startBtn.onclick = function () {
+	if (menuDiv.style.display !== "none") {
+		menuDiv.style.display = "none";
+		scrollBackToTop();
+		activateInteraction();
 	} else {
 		welcomeDiv.style.display = "block";
 	}
 }
 const churchDiv = document.getElementById("textChurch");
-const exitBtn = document.getElementById("exitButton");
-exitBtn.onclick = function () {
+const gearDiv = document.getElementById("textGear");
+const rockDiv = document.getElementById("textRock");
+const otherHobbies = document.getElementById("otherHobbies");
+
+const promoDiv = document.getElementById("textPromoTech");
+const techStackDiv = document.getElementById("textTechStack");
+const favoProjectsDiv = document.getElementById("textFavoProjects");
+
+const exitBtnChurch = document.getElementById("exitButtonChurch");
+const exitBtnGear = document.getElementById("exitButtonGear");
+const exitBtnRock = document.getElementById("exitButtonRock");
+const exitBtnHobbies = document.getElementById("exitButtonHobbies");
+const exitBtnComputer = document.getElementById("exitButtonComputer");
+exitBtnChurch.onclick = function () {
+	console.log('exit is pressed');
 	if (churchDiv.style.display !== "none") {
 		churchDiv.style.display = "none";
-	} else {
-		churchDiv.style.display = "block";
+		activateInteraction();
+	}
+}
+exitBtnGear.onclick = function () {
+	console.log('exit is pressed');
+	if (gearDiv.style.display !== "none") {
+		gearDiv.style.display = "none";
+		activateInteraction();
+	}
+}
+exitBtnRock.onclick = function () {
+	console.log('exit is pressed');
+	if (rockDiv.style.display !== "none") {
+		rockDiv.style.display = "none";
+		activateInteraction();
+	}
+}
+exitBtnHobbies.onclick = function () {
+	console.log('exit is pressed');
+	if (otherHobbies.style.display !== "none") {
+		otherHobbies.style.display = "none";
+		activateInteraction();
+	}
+}
+exitBtnComputer.onclick = function () {
+	console.log('exit is pressed');
+	if (promoDiv.style.display !== "none") {
+		promoDiv.style.display = "none";
+		techStackDiv.style.display = "none";
+		favoProjectsDiv.style.display = "none";
+		activateInteraction();
 	}
 }
 
-console.log(scene.children);
+// function goToObject(rotationY) {
+// 	currRotationY = camera.rotation.y;
+// 	if (rotationY < currRotation) {
+// 		// ++
+// 	} else {
+
+// 	}
+// }
 
 function onDocumentMouseClick(event) {
-	event.preventDefault();
-	console.log('( '+ event.clientX + ' ; '+event.clientY+' )');
-	mouse.x = (event.clientX / window.innerWidth) * 2 -1;
-	mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-	raycaster.setFromCamera(mouse, camera);
-	const intersects = raycaster.intersectObjects(scene.children);
-
-	console.log('length: ' + intersects.length)
-	for (let i = 0; i < intersects.length; i++) {
-		if (intersects[i].object.uuid == churchObject.uuid) {
-			console.log('Welcome to the church');
-			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
-			document.getElementById("textChurch").style.display = "block";
-		}
-		else if (intersects[i].object.uuid == gearObject.uuid) {
-			console.log('Welkom to the building');
-			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
-		}
-		else if (intersects[i].object.uuid == bicycleObject.uuid) {
-			console.log('Welcome to the bicycle');
-			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
-		}
-		else if (intersects[i].object.uuid == computerObject.uuid) {
-			console.log('Welcome to the computer');
-			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
-		}
-		else if (intersects[i].object.uuid == rockObject.uuid) {
-			console.log('Welcome to the climbing spot');
-			console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+	if (!reading) {
+		event.preventDefault();
+		console.log('( '+ event.clientX + ' ; '+event.clientY+' )');
+		mouse.x = (event.clientX / window.innerWidth) * 2 -1;
+		mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+		raycaster.setFromCamera(mouse, camera);
+		const intersects = raycaster.intersectObjects(scene.children);
+	
+		console.log('length: ' + intersects.length)
+		for (let i = 0; i < intersects.length; i++) {
+			if (intersects[i].object.uuid == churchObject.uuid) {
+				reading = true;
+				keyboardControls = false;
+				console.log('Welcome to the church');
+				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
+				document.getElementById("textChurch").style.display = "block";
+			}
+			else if (intersects[i].object.uuid == gearObject.uuid) {
+				reading = true;
+				keyboardControls = false;
+				console.log('Welkom to the building');
+				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				document.getElementById("textGear").style.display = "block";
+			}
+			else if (intersects[i].object.uuid == bicycleObject.uuid) {
+				reading = true;
+				keyboardControls = false;
+				console.log('Welcome to the bicycle');
+				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				document.getElementById("otherHobbies").style.display = "block";
+			}
+			else if (intersects[i].object.uuid == computerObject.uuid) {
+				reading = true;
+				keyboardControls = false;
+				console.log('Welcome to the computer');
+				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				document.getElementById("textPromoTech").style.display = "block";
+				document.getElementById("textTechStack").style.display = "block";
+				document.getElementById("textFavoProjects").style.display = "block";
+			}
+			else if (intersects[i].object.uuid == rockObject.uuid) {
+				reading = true;
+				keyboardControls = false;
+				console.log('Welcome to the climbing spot');
+				console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				document.getElementById("textRock").style.display = "block";
+			}
 		}
 	}
 }
@@ -405,7 +498,7 @@ function resetCameraPosition() {
 //37 left, 38 up, 39 right, 40 down, 114 reset, 97 A, 100 D, 119 W, 115 S
 function onKeyPress(event) {
 	console.log('keypress ', event.keyCode)
-	if (keyboardControls) {
+	if (keyboardControls && !reading) {
 		// if (event.keyCode == 115) {
 		// 	camera.rotation.x += 0.01;
 		// }
@@ -433,6 +526,7 @@ function onKeyPress(event) {
 		}
 	}
 }
+
 
 window.addEventListener('click', onDocumentMouseClick, false);
 window.addEventListener('resize', onWindowResize, false);

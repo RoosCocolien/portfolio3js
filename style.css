@@ -8,7 +8,7 @@ canvas {
 	--dark-bg: rgba(0, 19, 83, 0.651);
 	--spacing: 350px;
 	font-family: brandon-grotesque, sans-serif;
-	font-weight: 400;
+	font-weight: 200;
 	font-style: normal;
 }
 
@@ -29,7 +29,7 @@ main {
 	text-align: right;
 }
 
-#exitButton {
+.exitButton {
 	border: 3px outset var(--dark-bg);
 	background-color: transparent;
 	height: 50px;
@@ -43,7 +43,7 @@ main {
 	transition: all 0.3s ease;
 }
 
-#exitButton:hover {
+.exitButton:hover {
 	background-color: red;
 	color: white;
 }
@@ -52,7 +52,7 @@ main {
 	text-align: center;
 }
 
-#yesButton {
+.greenButton {
 	outline: none;
 	height: 40px;
 	text-align: center;
@@ -68,13 +68,17 @@ main {
 	transition: all 0.3s ease;
 }
 
-#yesButton:hover {
+.greenButton:hover {
 	color: white;
 	background: rgb(10,88, 0);
 }
 
 #textWelcome {
 	display: block;
+}
+
+#textMenu {
+	display: none;
 }
 
 #textBlockquote1 {
@@ -122,7 +126,7 @@ main {
 h1, h2, h3, blockquote {
 	margin-top: 0;
 	font-family: elevon, sans-serif;
-	font-weight: 700;
+	font-weight: 400;
 	font-style: normal;
 }
 
@@ -142,6 +146,7 @@ h1, h2, h3, blockquote {
 			font-size: 1.25rem;
 			line-height: 1.5;
 			margin-bottom: var(--spacing);
+			border: 3px outset var(--dark-bg);
 		}
 
 		blockquote {
