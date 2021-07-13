@@ -1,12 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
-// import CameraControls from 'camera-controls';
-// import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls';
-// import { STLLoader } from './node_modules/three/examples/jsm/loaders/STLLoader';
 import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader';
-// import { CubeCamera } from 'three';
 
-// CameraControls.install({THREE: THREE});
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 600);
@@ -25,6 +20,7 @@ camera.rotation.set(0, 0, 0);
 let keyboardControls = false;
 let resetCamera = false;
 let reading = true;
+let animateKey = false;
 
 //SKYBOX
 let materialArr = [];
@@ -80,6 +76,15 @@ grassSurface.rotation.x = 270 * (Math.PI / 180);
 grassSurface.position.y = floorHeight;
 scene.add(grassSurface);
 
+function loadingPage() {
+	setTimeout(function() {
+		document.getElementById("loader").style.display = "none";
+		document.getElementById("loaderWrapper").style.display = "none";
+		scrollBackToTop();
+	}, 1000);
+}
+
+loadingPage();
 
 function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 {
@@ -113,6 +118,11 @@ function createModelAddToScene(textureFile, objectFile, scale, x, y, z)
 	return (model);
 }
 
+let keyBlueUuid;
+let keyGreenUuid;
+let keyRedUuid;
+let screenComputer;
+
 //COMPUTER
 function createComputer() {
 	const computer = new THREE.Group();
@@ -126,11 +136,14 @@ function createComputer() {
 	keyboard.position.y = objectHeight;
 	const keyGeo = new THREE.BoxGeometry(1, 1, 1);
 	const keyBlue = new THREE.Mesh(keyGeo, materialKeyBlue);
+	keyBlueUuid = keyBlue.uuid;
 	keyBlue.position.y = objectHeight + 0.3;
 	keyBlue.position.x = -1.5;
 	const keyGreen = new THREE.Mesh(keyGeo, materialKeyGreen);
+	keyGreenUuid = keyGreen.uuid;
 	keyGreen.position.y = objectHeight + 0.3;
 	const keyRed = new THREE.Mesh(keyGeo, materialKeyRed);
+	keyRedUuid = keyRed.uuid;
 	keyRed.position.y = objectHeight + 0.3;
 	keyRed.position.x = 1.5;
 	//desktop
@@ -144,6 +157,7 @@ function createComputer() {
 	computerBox.position.z = -5;
 	computerBox.position.y = objectHeight + 4;
 	const screen = new THREE.Mesh(new THREE.BoxGeometry(8, 4.5, 0.5), materialScreen);
+	screenComputer = screen;
 	screen.position.z = -3.9;
 	screen.position.y = objectHeight + 4.1;
 	computer.add(keyboard,keyBlue,keyGreen,keyRed, base, neck, computerBox, screen);
@@ -200,9 +214,7 @@ function createChurch() {
 	church.rotation.y = 5 * (Math.PI / 180);
 	return (church);
 }
-		
-		
-		
+
 //gearWheel
 function createGearBox(texture) {
 	const gearBox = new THREE.Mesh(
@@ -210,8 +222,8 @@ function createGearBox(texture) {
 		new THREE.MeshPhongMaterial( {map: texture} )
 	)
 	return (gearBox);
-} 
-	
+}
+
 function createGearWheel() {
 	const gearWheel = new THREE.Group();
 	const gearWheelTexture = new THREE.TextureLoader().load('textures/submarine.jpeg');
@@ -257,9 +269,9 @@ gearWheel.position.set(17, objectHeight + 3, -5);
 gearWheel.rotation.y = 288 * (Math.PI / 180);
 
 //create transparant meshes
-function createTransparantMesh(x, y, z) {
+function createTransparantMesh(x, y, z, l, b, h) {
 	const object = new THREE.Mesh(
-		new THREE.BoxGeometry(10, 10, 10),
+		new THREE.BoxGeometry(l, b, h),
 		new THREE.MeshBasicMaterial({color: 0xffffff, wireframe: true})
 	)
 	object.position.set(x, y, z);
@@ -267,12 +279,6 @@ function createTransparantMesh(x, y, z) {
 	return (object);
 }
 
-// const torusHelper = new THREE.Mesh(
-// 	new THREE.TorusGeometry(20, 1, 16, 100),
-// 	new THREE.MeshBasicMaterial({color: 0xffffff})
-// )
-// torusHelper.rotation.x = 90 * (Math.PI / 180);
-// scene.add(torusHelper);
 
 // createBicycleAddToScene();
 let rock = createModelAddToScene('models/rock/textures/Rock_6_d.jpg','models/rock/Rock_6.OBJ', 5, -19, objectHeight, -6.18);
@@ -286,42 +292,13 @@ scene.add(church);
 scene.add(gearWheel);
 
 //create transp meshes
-const churchObject = createTransparantMesh(0, -2, -20);
-const gearObject = createTransparantMesh(19, -3, -6.18);
-const bicycleObject = createTransparantMesh(15, -2, 13);
-const computerObject = createTransparantMesh(-10, -2, 10);
-const rockObject = createTransparantMesh(-15, -2, -5);
+const churchObject = createTransparantMesh(0, -2, -20, 10, 10, 10);
+const gearObject = createTransparantMesh(19, -3, -6.18, 10, 10, 10);
+const bicycleObject = createTransparantMesh(15, -2, 13, 10, 10, 10);
+const computerObject = createTransparantMesh(-12, -1.5, 12, 5, 5, 9);
+computerObject.rotation.y = 45 * (Math.PI / 180);
+const rockObject = createTransparantMesh(-15, -2, -5, 10, 10, 10);
 scene.add(churchObject, gearObject, bicycleObject, computerObject, rockObject);
-
-
-// function moveCamera() {
-// 	//where is the user currently scrolled to? Get the view port.
-// 	//Call the document body get boudning client rect
-// 	//that will give us the dimensions of the viewport
-// 	//the top porperty will show us how far we are from the top of the webpage
-// 	//from there we can start changing properties on our 3d objects whenever this function is called
-// 	const topValue = document.body.getBoundingClientRect().top;
-// 	// worldSphere.rotation.x += 0.05;
-// 	// worldSphere.rotation.y += 0.01;
-// 	// worldSphere.rotation.z += 0.05;
-// 	// worldSphere.position.y *= -(topValue)
-	
-// 	// roosCube.rotation.y += 0.01;
-// 	// roosCube.rotation.z += 0.01;
-	
-// 	//the top value will always be negative so multiple it by a negative number
-// 	if (topValue < 0) {
-// 		camera.position.z = (topValue * -0.005);
-// 		camera.position.x = (topValue * -0.0001);
-// 		camera.position.y = (topValue * -0.00005);
-// 	} else {
-// 		camera.position.z = (topValue * 0.005);
-// 		camera.position.x = (topValue * 0.0001);
-// 		camera.position.y = (topValue * 0.00005);
-// 	}
-// }
-// moveCamera();
-// document.body.onscroll = moveCamera;
 
 function scrollBackToTop() {
 	document.body.scrollTop = 0;
@@ -332,7 +309,15 @@ function activateInteraction() {
 	setTimeout(function() {
 		reading = false;
 		keyboardControls = true;
+		document.getElementById("instructions").style.display = "block";
 	}, 1000);
+}
+
+function deactivateInteraction() {
+	reading = true;
+	keyboardControls = false;
+	scrollBackToTop();
+	document.getElementById("instructions").style.display = "none";
 }
 
 const welcomeDiv = document.getElementById("textWelcome");
@@ -409,61 +394,70 @@ exitBtnComputer.onclick = function () {
 	}
 }
 
-// function goToObject(rotationY) {
-// 	currRotationY = camera.rotation.y;
-// 	if (rotationY < currRotation) {
-// 		// ++
-// 	} else {
+function animateKeyPress(keyObject) {
+	keyObject.position.y -= 0.3;
+	setTimeout(function() {
+		keyObject.position.y += 0.3;
+		animateKey = false;
+	}, 1000);
+}
 
-// 	}
-// }
+function checkIntersectComputer(raycaster) {
+	const intersectComputer = raycaster.intersectObjects(computer.children);
+
+	if (animateKey == false) {
+		for (let i = 0; i < intersectComputer.length; i++) {
+			if (intersectComputer[i].object.uuid == keyBlueUuid) {
+				animateKey = true;
+				animateKeyPress(intersectComputer[i].object);
+				screenComputer.material.color.setHex(Math.random() * 0xff0000);
+			}
+			if (intersectComputer[i].object.uuid == keyGreenUuid) {
+				animateKey = true;
+				animateKeyPress(intersectComputer[i].object);
+				screenComputer.material.color.setHex(Math.random() * 0x00ff00);
+
+			}
+			if (intersectComputer[i].object.uuid == keyRedUuid) {
+				animateKey = true;
+				animateKeyPress(intersectComputer[i].object);
+				screenComputer.material.color.setHex(Math.random() * 0x0000ff);
+			}
+		}
+	}
+}
 
 function onDocumentMouseClick(event) {
 	if (!reading) {
 		event.preventDefault();
-		console.log('( '+ event.clientX + ' ; '+event.clientY+' )');
 		mouse.x = (event.clientX / window.innerWidth) * 2 -1;
 		mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 		raycaster.setFromCamera(mouse, camera);
 		const intersects = raycaster.intersectObjects(scene.children);
+		checkIntersectComputer(raycaster);
 	
 		// console.log('length: ' + intersects.length)
 		for (let i = 0; i < intersects.length; i++) {
 			if (intersects[i].object.uuid == churchObject.uuid) {
-				reading = true;
-				keyboardControls = false;
-				// console.log('Welcome to the church');
-				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z);
+				deactivateInteraction();
 				document.getElementById("textChurch").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == gearObject.uuid) {
-				reading = true;
-				keyboardControls = false;
-				// console.log('Welkom to the building');
-				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				deactivateInteraction();
 				document.getElementById("textGear").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == bicycleObject.uuid) {
-				reading = true;
-				keyboardControls = false;
-				// console.log('Welcome to the bicycle');
-				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				deactivateInteraction();
 				document.getElementById("otherHobbies").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == computerObject.uuid) {
-				reading = true;
-				keyboardControls = false;
-				// console.log('Welcome to the computer');
-				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				deactivateInteraction();
 				document.getElementById("textPromoTech").style.display = "block";
 				document.getElementById("textTechStack").style.display = "block";
 				document.getElementById("textFavoProjects").style.display = "block";
 			}
 			else if (intersects[i].object.uuid == rockObject.uuid) {
-				reading = true;
-				keyboardControls = false;
-				// console.log('Welcome to the climbing spot');
-				// console.log('position camera: ' + camera.position.x, ' ', camera.position.y,' ', camera.position.z,' ', camera.rotation.x,' ', camera.rotation.y,' ', camera.rotation.z)
+				deactivateInteraction();
 				document.getElementById("textRock").style.display = "block";
 			}
 		}
@@ -478,13 +472,11 @@ function onWindowResize() {
 
 function resetCameraPosition() {
 	if (camera.rotation.y > 3.14) {
-		// console.log('test1')
 		camera.rotation.y += 0.1;
 		if (camera.rotation.y >= 360 * (Math.PI / 180))
 			camera.rotation.y = 0;
 	}
 	else if (camera.rotation.y <= 3.14) {
-		// console.log('test2')
 		camera.rotation.y -= 0.1;
 	}
 	if (camera.rotation.y >= -0.1 && camera.rotation.y <= 0.1) {
@@ -496,32 +488,40 @@ function resetCameraPosition() {
 
 //37 left, 38 up, 39 right, 40 down, 114 reset, 97 A, 100 D, 119 W, 115 S
 function onKeyPress(event) {
-	// console.log('keypress ', event.keyCode)
 	if (keyboardControls && !reading) {
-		// if (event.keyCode == 115) {
-		// 	camera.rotation.x += 0.01;
-		// }
 		// if (event.keyCode == 119) {
-		// 	camera.rotation.x -= 0.01;
+		// 	camera.rotation.z -= 0.01;
+		// }
+		// if (event.keyCode == 115) {
+		// 	camera.rotation.z += 0.01;
+		// }
+		// if (event.keyCode == 113) {
+		// 	camera.rotation.y -= 0.01;
+		// 	camera.position.y += 0.1;
+		// }
+		// if (event.keyCode == 101) {
+		// 	camera.rotation.y += 0.01;
+		// 	camera.position.y -= 0.1;
 		// }
 		if (event.keyCode == 100) {
 			if (camera.rotation.y <= 0) {
 				camera.rotation.y = 360 * (Math.PI / 180);
 			}
-			console.log(camera.rotation.y);
 			camera.rotation.y -= 0.01;
 		}
 		if (event.keyCode == 97) {
 			if (camera.rotation.y >= 360 * (Math.PI / 180)) {
 				camera.rotation.y = 0;
 			}
-			console.log(camera.rotation.y);
 			camera.rotation.y += 0.01;
 		}
 		if (event.keyCode == 114) {
 			keyboardControls = false;
 			resetCamera = true;
-			// resetCameraPosition();
+		}
+		if (event.keyCode == 109) {
+			deactivateInteraction();
+			document.getElementById("textMenu").style.display = "block";
 		}
 	}
 }
@@ -532,20 +532,12 @@ window.addEventListener('resize', onWindowResize, false);
 window.addEventListener('keypress', onKeyPress, false);
 
 
-// let t = 0;
 function animate() {
 	requestAnimationFrame(animate);
-
-	// t += 0.01;
-	// moonSphere.position.x = 20*Math.cos(t) + 20;
-	// moonSphere.position.z = 20*Math.sin(t) + 10;
-
 	if (resetCamera == true) {
 		resetCameraPosition();
 	}
 	gearWheel.rotation.z += 0.01;
-	// controls.update();
-
 	renderer.render(scene, camera);
 }
 
