@@ -5,10 +5,10 @@ canvas {
 }
 
 :root {
-	--dark-bg: rgba(15,15,15,0.90);
+	--dark-bg: rgba(0, 19, 83, 0.651);
 	--spacing: 350px;
 	font-family: brandon-grotesque, sans-serif;
-	font-weight: 400;
+	font-weight: 200;
 	font-style: normal;
 }
 
@@ -25,18 +25,221 @@ main {
 	grid-template-columns: repeat(12, 1fr);
 }
 
+#loaderWrapper {
+	display: block;
+	background: rgb(27, 27, 27);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+}
+
+#middleCounter {
+	text-align: center;
+
+}
+
+#loader {
+	display: block;
+	position: relative;
+	left: 50%;
+	top: 50%;
+	width: 150px;
+	height: 150px;
+	margin: -75px 0 0 -75px;
+
+	border: 3px solid transparant;
+	border-top-color: #8f2626;
+	/* z-index: 1500; */
+	border-radius: 50%;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+}
+
+#loader:before {
+	content: "";
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	right: 5px;
+	bottom: 5px;
+	border: 3px solid transparent;
+	border-top-color: #2736bd;
+	border-radius: 50%;
+	-webkit-animation: spin 3s linear infinite;
+	animation: spin 3s linear infinite;
+}
+
+
+#loader:after {
+	content: "";
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	right: 15px;
+	bottom: 15px;
+	border: 3px solid transparent;
+	border-top-color: #145e14;
+	border-radius: 50%;
+	-webkit-animation: spin 1.5s linear infinite;
+	animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		-ms-transform: rotate(0deg);
+		transform: rotate(360deg);
+	}
+}
+@keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		transform:rotate(360deg);
+	}
+}
+
+#instructions {
+	display: none;
+	background-color: rgba(65, 65, 65, 0.582);
+	border: 2px outset black;
+	float: right;
+	color: black;
+	position: absolute;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: x-small;
+	grid-column: 11 / 13;
+}
+
+#instructionsH2 {
+	font-family:'Courier New', Courier, monospace;
+}
+
+.topButtonDiv {
+	text-align: right;
+}
+
+.exitButton {
+	border: 3px outset var(--dark-bg);
+	background-color: transparent;
+	height: 50px;
+	width:50px;
+	cursor:pointer;
+	color: var(--dark-bg);
+	align-items: right;
+	border-radius: 50%;
+	letter-spacing: 1px;
+	font-weight: bold;
+	transition: all 0.3s ease;
+}
+
+.exitButton:hover {
+	background-color: red;
+	color: white;
+}
+
+.bottomButtonDiv {
+	text-align: center;
+}
+
+.greenButton {
+	outline: none;
+	height: 40px;
+	text-align: center;
+	background-color: rgba(25, 211, 0, 0.568);
+	width: 130px;
+	border-radius: 40px;
+	border: 2px solid rgb(10, 88, 0);
+	color: rgb(10, 88, 0);
+	letter-spacing: 1px;
+	text-shadow: 0.3;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.greenButton:hover {
+	color: white;
+	background: rgb(10,88, 0);
+}
+
+#textWelcome {
+	display: block;
+}
+
+#textMenu {
+	display: none;
+}
+
+#textBlockquote1 {
+	display: none;
+}
+
+#textTechStack {
+	display:none;
+}
+
+#textGear {
+	display:none;
+}
+#textRock {
+	display:none;
+}
+#textChurch {
+	display:none;
+}
+
+#textFavoProjects {
+	display:none;
+}
+
+#textBlockquote2 {
+	display: none;
+}
+
+#otherHobbies {
+	display: none;
+}
+
+#textPromoTech {
+	display: none;
+}
+
+#textThanks {
+	display: none;
+}
+
+#textQuestions {
+	display: none;
+}
+
 h1, h2, h3, blockquote {
+	margin-top: 0;
 	font-family: elevon, sans-serif;
-	font-weight: 700;
+	font-weight: 400;
 	font-style: normal;
 }
 
 	header {
 		background: var(--dark-bg);
-		grid-column: 2 / span 5; /*start at 2nd columm ,let it span 5 columns*/
+		grid-column: 2 / span 10; /*start at 2nd columm ,let it span 5 columns*/
 		font-size: 2.5rem;
 		padding: 2rem;
 		margin-bottom: var(--spacing);
+		border: 3px outset var(--dark-bg);
 	}
 
 		section {
@@ -46,6 +249,7 @@ h1, h2, h3, blockquote {
 			font-size: 1.25rem;
 			line-height: 1.5;
 			margin-bottom: var(--spacing);
+			border: 3px outset var(--dark-bg);
 		}
 
 		blockquote {
