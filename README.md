@@ -2,11 +2,11 @@
 New portfolio website build with three.js
 
 ### Description
-This portfolio is my personal playground of trying out new tools and technologies. Currently exploring WebGL and Three.js.
+This portfolio is my personal playground of trying out new tools and technologies. Currently exploring Three.js.
 
 
 #### Installation
-From terminal, the program can be install with git clone from the repository followed by name of directory you wish to download repository to.
+From terminal, the program can be installed with git clone from the repository followed by the name of directory you wish to download the repository to.
 
 #### Example
 
